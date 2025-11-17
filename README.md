@@ -1,3 +1,4 @@
 # Diagram
 
-![](./Diagram/tracker.drawio)
+![](./Diagram/tracker.drawio.svg)
+![Diagram](Diagram/diagram.png)
