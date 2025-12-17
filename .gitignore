@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+.vscode/
+appsettings.json
+ExpenseTracker.Presentation/appsettings.Development.json
+ExpenseTracker.Presentation/Properties/launchSettings.json
