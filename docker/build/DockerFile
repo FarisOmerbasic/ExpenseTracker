@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ExpenseTracker.sln ./
+COPY ExpenseTracker.Application/*.csproj ExpenseTracker.Application/
+COPY ExpenseTracker.Domain/*.csproj ExpenseTracker.Domain/
+COPY ExpenseTracker.Infrastructure/*.csproj ExpenseTracker.Infrastructure/
+COPY ExpenseTracker.Presentation/*.csproj ExpenseTracker.Presentation/
+RUN dotnet restore ExpenseTracker.Presentation/ExpenseTracker.Presentation.csproj
+COPY . .
+RUN dotnet publish ExpenseTracker.Presentation/ExpenseTracker.Presentation.csproj -c Release -o /app/publish
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "ExpenseTracker.Presentation.dll"]
