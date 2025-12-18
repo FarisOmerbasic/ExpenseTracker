@@ -7,10 +7,12 @@ namespace ExpenseTracker.Application.Services;
 public class UserService
 {
     private readonly IUserRepository _users;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public UserService(IUserRepository users)
+    public UserService(IUserRepository users, IPasswordHasher passwordHasher)
     {
         _users = users;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<IReadOnlyList<UserDto>> GetAllAsync(CancellationToken ct = default)
@@ -47,7 +49,7 @@ public class UserService
         {
             Name = dto.Name,
             Email = dto.Email,
-            PasswordHash = dto.PasswordHash,
+            PasswordHash = _passwordHasher.Hash(dto.Password),
             CurrencyPreference = dto.CurrencyPreference
         };
 
@@ -69,7 +71,7 @@ public class UserService
 
         existing.Name = dto.Name;
         existing.Email = dto.Email;
-        existing.PasswordHash = dto.PasswordHash;
+        existing.PasswordHash = _passwordHasher.Hash(dto.Password);
         existing.CurrencyPreference = dto.CurrencyPreference;
 
         await _users.UpdateAsync(existing, ct);

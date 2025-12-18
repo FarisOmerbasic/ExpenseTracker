@@ -2,12 +2,15 @@ using ExpenseTracker.Application.Interfaces;
 using ExpenseTracker.Application.Services;
 using ExpenseTracker.Infrastructure.Data;
 using ExpenseTracker.Infrastructure.Repositories;
+using ExpenseTracker.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+
+builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
