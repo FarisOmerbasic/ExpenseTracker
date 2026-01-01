@@ -1,11 +1,14 @@
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Services;
+using ExpenseTracker.Presentation.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ExpensesController : ControllerBase
 {
     private readonly ExpenseService _service;
@@ -23,8 +26,11 @@ public class ExpensesController : ControllerBase
         try
         {
             _logger.LogDebug($"ExpensesController - Get invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
             var expense = await _service.GetAsync(id, ct);
             if (expense is null) return NotFound();
+            if (expense.UserId != userId.Value) return Forbid();
             return Ok(expense);
         }
         catch (Exception ex)
@@ -40,6 +46,9 @@ public class ExpensesController : ControllerBase
         try
         {
             _logger.LogDebug($"ExpensesController - GetByUser invoked (userId: {userId})");
+            var currentUserId = User.GetUserId();
+            if (currentUserId is null) return Unauthorized();
+            if (currentUserId.Value != userId) return Forbid();
             var result = await _service.GetByUserAsync(userId, ct);
             return Ok(result);
         }
@@ -56,6 +65,9 @@ public class ExpensesController : ControllerBase
         try
         {
             _logger.LogDebug("ExpensesController - Create invoked");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            dto.UserId = userId.Value;
             var created = await _service.CreateAsync(dto, ct);
             return CreatedAtAction(nameof(Get), new { id = created.ExpenseId }, created);
         }
@@ -72,6 +84,12 @@ public class ExpensesController : ControllerBase
         try
         {
             _logger.LogDebug($"ExpensesController - Update invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            var existing = await _service.GetAsync(id, ct);
+            if (existing is null) return NotFound();
+            if (existing.UserId != userId.Value) return Forbid();
+            dto.UserId = userId.Value;
             var ok = await _service.UpdateAsync(id, dto, ct);
             if (!ok) return NotFound();
             return NoContent();
@@ -89,6 +107,11 @@ public class ExpensesController : ControllerBase
         try
         {
             _logger.LogDebug($"ExpensesController - Delete invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            var existing = await _service.GetAsync(id, ct);
+            if (existing is null) return NotFound();
+            if (existing.UserId != userId.Value) return Forbid();
             var ok = await _service.DeleteAsync(id, ct);
             if (!ok) return NotFound();
             return NoContent();
