@@ -13,6 +13,17 @@ public class UserRepository : IUserRepository {
     public Task<User?> GetAsync(int id, CancellationToken ct = default) =>
         _db.Users.FirstOrDefaultAsync(u => u.UserId == id, ct);
 
+    public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return Task.FromResult<User?>(null);
+        }
+
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        return _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail, ct);
+    }
+
     public async Task<IReadOnlyList<User>> GetAllAsync(CancellationToken ct = default) =>
         await _db.Users.AsNoTracking().ToListAsync(ct);
 
