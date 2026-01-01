@@ -1,11 +1,14 @@
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Services;
+using ExpenseTracker.Presentation.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly UserService _service;
@@ -23,8 +26,11 @@ public class UsersController : ControllerBase
         try
         {
             _logger.LogDebug("UsersController - GetAll invoked");
-            var users = await _service.GetAllAsync(ct);
-            return Ok(users);
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            var user = await _service.GetAsync(userId.Value, ct);
+            if (user is null) return NotFound();
+            return Ok(new[] { user });
         }
         catch (Exception ex)
         {
@@ -39,6 +45,9 @@ public class UsersController : ControllerBase
         try
         {
             _logger.LogDebug($"UsersController - Get invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            if (userId.Value != id) return Forbid();
             var user = await _service.GetAsync(id, ct);
             if (user is null) return NotFound();
             return Ok(user);
@@ -50,6 +59,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<UserDto>> Create(CreateUserDto dto, CancellationToken ct)
     {
@@ -72,6 +82,9 @@ public class UsersController : ControllerBase
         try
         {
             _logger.LogDebug($"UsersController - Update invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            if (userId.Value != id) return Forbid();
             var ok = await _service.UpdateAsync(id, dto, ct);
             if (!ok) return NotFound();
             return NoContent();
@@ -89,6 +102,9 @@ public class UsersController : ControllerBase
         try
         {
             _logger.LogDebug($"UsersController - Delete invoked (id: {id})");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            if (userId.Value != id) return Forbid();
             var ok = await _service.DeleteAsync(id, ct);
             if (!ok) return NotFound();
             return NoContent();
