@@ -9,12 +9,18 @@ public class AuthService
     private readonly IUserRepository _users;
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenService _tokenService;
+    private readonly IPasswordResetTokenService _passwordResetTokens;
 
-    public AuthService(IUserRepository users, IPasswordHasher passwordHasher, ITokenService tokenService)
+    public AuthService(
+        IUserRepository users,
+        IPasswordHasher passwordHasher,
+        ITokenService tokenService,
+        IPasswordResetTokenService passwordResetTokens)
     {
         _users = users;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
+        _passwordResetTokens = passwordResetTokens;
     }
 
     public async Task<AuthResponseDto?> LoginAsync(LoginRequestDto dto, CancellationToken ct = default)
@@ -53,6 +59,42 @@ public class AuthService
 
         await _users.AddAsync(entity, ct);
         return BuildResponse(entity);
+    }
+
+    public async Task<PasswordResetTokenResult?> RequestPasswordResetAsync(PasswordResetRequestDto dto, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Email)) return null;
+
+        var email = dto.Email.Trim();
+        var user = await _users.GetByEmailAsync(email, ct);
+        if (user is null) return null;
+
+        return _passwordResetTokens.CreateToken(user);
+    }
+
+    public async Task<bool> ResetPasswordAsync(PasswordResetConfirmDto dto, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Token) || string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            return false;
+        }
+        if (dto.NewPassword.Length < 8)
+        {
+            return false;
+        }
+
+        if (!_passwordResetTokens.TryValidateToken(dto.Token, out var userId, out var email))
+        {
+            return false;
+        }
+
+        var user = await _users.GetAsync(userId, ct);
+        if (user is null) return false;
+        if (!string.Equals(user.Email, email, StringComparison.OrdinalIgnoreCase)) return false;
+
+        user.PasswordHash = _passwordHasher.Hash(dto.NewPassword);
+        await _users.UpdateAsync(user, ct);
+        return true;
     }
 
     private AuthResponseDto BuildResponse(User user)
