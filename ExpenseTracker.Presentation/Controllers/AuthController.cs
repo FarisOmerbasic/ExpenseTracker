@@ -2,6 +2,7 @@ using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace ExpenseTracker.Presentation.Controllers;
 
@@ -11,11 +12,13 @@ public class AuthController : ControllerBase
 {
     private readonly AuthService _service;
     private readonly ILogger<AuthController> _logger;
+    private readonly IHostEnvironment _env;
 
-    public AuthController(AuthService service, ILogger<AuthController> logger)
+    public AuthController(AuthService service, ILogger<AuthController> logger, IHostEnvironment env)
     {
         _service = service;
         _logger = logger;
+        _env = env;
     }
 
     [AllowAnonymous]
@@ -58,6 +61,62 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Exception in AuthController.Login");
+            throw;
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpPost("password-reset/request")]
+    public async Task<ActionResult> RequestPasswordReset(PasswordResetRequestDto dto, CancellationToken ct)
+    {
+        try
+        {
+            _logger.LogDebug("AuthController - Password reset request invoked");
+            if (string.IsNullOrWhiteSpace(dto.Email))
+            {
+                return BadRequest(new { message = "Email is required." });
+            }
+
+            var result = await _service.RequestPasswordResetAsync(dto, ct);
+            var message = new { message = "If the email exists, a reset link has been sent." };
+
+            if (_env.IsDevelopment() && result is not null)
+            {
+                return Accepted(new { message.message, result.Token, result.ExpiresAtUtc });
+            }
+
+            return Accepted(message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception in AuthController.RequestPasswordReset");
+            throw;
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpPost("password-reset/confirm")]
+    public async Task<ActionResult> ConfirmPasswordReset(PasswordResetConfirmDto dto, CancellationToken ct)
+    {
+        try
+        {
+            _logger.LogDebug("AuthController - Password reset confirm invoked");
+            if (string.IsNullOrWhiteSpace(dto.Token) || string.IsNullOrWhiteSpace(dto.NewPassword))
+            {
+                return BadRequest(new { message = "Token and new password are required." });
+            }
+            if (dto.NewPassword.Length < 8)
+            {
+                return BadRequest(new { message = "Password must be at least 8 characters long." });
+            }
+
+            var ok = await _service.ResetPasswordAsync(dto, ct);
+            if (!ok) return BadRequest(new { message = "Invalid or expired reset token." });
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception in AuthController.ConfirmPasswordReset");
             throw;
         }
     }
