@@ -40,21 +40,20 @@ public class CategoriesController : ControllerBase
         }
     }
 
-    [HttpGet("user/{userId:int}")]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetByUser(int userId, CancellationToken ct)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetMine(CancellationToken ct)
     {
         try
         {
-            _logger.LogDebug($"CategoriesController - GetByUser invoked (userId: {userId})");
-            var currentUserId = User.GetUserId();
-            if (currentUserId is null) return Unauthorized();
-            if (currentUserId.Value != userId) return Forbid();
-            var result = await _service.GetByUserAsync(userId, ct);
+            _logger.LogDebug("CategoriesController - GetMine invoked");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            var result = await _service.GetByUserAsync(userId.Value, ct);
             return Ok(result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception in CategoriesController.GetByUser");
+            _logger.LogError(ex, "Exception in CategoriesController.GetMine");
             throw;
         }
     }
