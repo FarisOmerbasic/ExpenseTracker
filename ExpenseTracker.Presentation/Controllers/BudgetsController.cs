@@ -40,21 +40,20 @@ public class BudgetsController : ControllerBase
         }
     }
 
-    [HttpGet("user/{userId:int}")]
-    public async Task<ActionResult<IEnumerable<BudgetDto>>> GetByUser(int userId, CancellationToken ct)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<BudgetDto>>> GetMine(CancellationToken ct)
     {
         try
         {
-            _logger.LogDebug($"BudgetsController - GetByUser invoked (userId: {userId})");
-            var currentUserId = User.GetUserId();
-            if (currentUserId is null) return Unauthorized();
-            if (currentUserId.Value != userId) return Forbid();
-            var result = await _service.GetByUserAsync(userId, ct);
+            _logger.LogDebug("BudgetsController - GetMine invoked");
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+            var result = await _service.GetByUserAsync(userId.Value, ct);
             return Ok(result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception in BudgetsController.GetByUser");
+            _logger.LogError(ex, "Exception in BudgetsController.GetMine");
             throw;
         }
     }

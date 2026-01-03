@@ -20,25 +20,6 @@ public class UsersController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetAll(CancellationToken ct)
-    {
-        try
-        {
-            _logger.LogDebug("UsersController - GetAll invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var user = await _service.GetAsync(userId.Value, ct);
-            if (user is null) return NotFound();
-            return Ok(new[] { user });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in UsersController.GetAll");
-            throw;
-        }
-    }
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<UserDto>> Get(int id, CancellationToken ct)
     {
@@ -55,23 +36,6 @@ public class UsersController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Exception in UsersController.Get");
-            throw;
-        }
-    }
-
-    [AllowAnonymous]
-    [HttpPost]
-    public async Task<ActionResult<UserDto>> Create(CreateUserDto dto, CancellationToken ct)
-    {
-        try
-        {
-            _logger.LogDebug("UsersController - Create invoked");
-            var created = await _service.CreateAsync(dto, ct);
-            return CreatedAtAction(nameof(Get), new { id = created.UserId }, created);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in UsersController.Create");
             throw;
         }
     }
