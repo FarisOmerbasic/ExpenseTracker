@@ -78,14 +78,14 @@ public sealed class PasswordResetTokenService : IPasswordResetTokenService
         try
         {
             var principal = _handler.ValidateToken(token, _validationParameters, out _);
-            var tokenType = principal.FindFirstValue(JwtRegisteredClaimNames.Typ);
+            var tokenType = principal.FindFirst(JwtRegisteredClaimNames.Typ)?.Value;
             if (!string.Equals(tokenType, ResetTokenType, StringComparison.Ordinal)) return false;
 
-            var userIdValue = principal.FindFirstValue(ClaimTypes.NameIdentifier)
-                               ?? principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            var userIdValue = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                               ?? principal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
             if (!int.TryParse(userIdValue, out userId)) return false;
 
-            email = principal.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+            email = principal.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
             if (string.IsNullOrWhiteSpace(email)) return false;
 
             return true;
