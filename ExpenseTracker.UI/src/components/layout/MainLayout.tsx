@@ -1,23 +1,24 @@
-import React from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import Sidebar from './Sidebar';
+import Header from './Header';
 
-const MainLayout: React.FC = () => {
-    return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <header className="bg-white dark:bg-gray-800 shadow">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                        Expense Tracker
-                    </h1>
-                </div>
-            </header>
-            <main>
-                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <Outlet />
-                </div>
-            </main>
-        </div>
-    );
-};
+export default function MainLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-export default MainLayout;
+  return (
+    <div className="flex h-screen overflow-hidden bg-surface-50">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <Header onMenuClick={() => setSidebarOpen(true)} />
+        <main className="flex-1 overflow-y-auto">
+          <div className="gradient-mesh min-h-full">
+            <div className="mx-auto max-w-7xl p-6 lg:p-8">
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
