@@ -5,3 +5,7 @@ obj/
 appsettings.json
 ExpenseTracker.Presentation/appsettings.Development.json
 ExpenseTracker.Presentation/Properties/launchSettings.json
+
+# Frontend build/cache artifacts accidentally generated at repo root
+.vite/
+debug-output.css
