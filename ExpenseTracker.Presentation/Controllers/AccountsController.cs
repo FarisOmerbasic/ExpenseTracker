@@ -9,116 +9,61 @@ namespace ExpenseTracker.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AccountsController : ControllerBase
+public class AccountsController(AccountService service) : ControllerBase
 {
-    private readonly AccountService _service;
-    private readonly ILogger<AccountsController> _logger;
-
-    public AccountsController(AccountService service, ILogger<AccountsController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<AccountDto>> Get(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"AccountsController - Get invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var account = await _service.GetAsync(id, ct);
-            if (account is null) return NotFound();
-            if (account.UserId != userId.Value) return Forbid();
-            return Ok(account);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in AccountsController.Get");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var account = await service.GetAsync(id, ct);
+        if (account is null) return NotFound();
+        if (account.UserId != userId.Value) return Forbid();
+        return Ok(account);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AccountDto>>> GetMine(CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("AccountsController - GetMine invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var result = await _service.GetByUserAsync(userId.Value, ct);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in AccountsController.GetMine");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        return Ok(await service.GetByUserAsync(userId.Value, ct));
     }
 
     [HttpPost]
     public async Task<ActionResult<AccountDto>> Create(CreateAccountDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("AccountsController - Create invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            dto.UserId = userId.Value;
-            var created = await _service.CreateAsync(dto, ct);
-            return CreatedAtAction(nameof(Get), new { id = created.AccountId }, created);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in AccountsController.Create");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        dto.UserId = userId.Value;
+        var created = await service.CreateAsync(dto, ct);
+        return CreatedAtAction(nameof(Get), new { id = created.AccountId }, created);
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, CreateAccountDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"AccountsController - Update invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            dto.UserId = userId.Value;
-            var ok = await _service.UpdateAsync(id, dto, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in AccountsController.Update");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        dto.UserId = userId.Value;
+        var ok = await service.UpdateAsync(id, dto, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"AccountsController - Delete invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            var ok = await _service.DeleteAsync(id, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in AccountsController.Delete");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        var ok = await service.DeleteAsync(id, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 }

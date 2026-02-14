@@ -73,6 +73,7 @@ public class ExpenseTrackerDbContext : DbContext
             entity.HasOne(x => x.User).WithMany(u => u.Expenses).HasForeignKey(x => x.UserId);
             entity.HasOne(x => x.Category).WithMany(c => c.Expenses).HasForeignKey(x => x.CategoryId);
             entity.HasOne(x => x.PaymentMethod).WithMany(p => p.Expenses).HasForeignKey(x => x.PaymentMethodId);
+            entity.HasOne(x => x.Account).WithMany(a => a.Expenses).HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.SetNull);
         });
 
         builder.Entity<Budget>(entity =>
@@ -80,8 +81,9 @@ public class ExpenseTrackerDbContext : DbContext
             entity.ToTable("budget");
             entity.HasKey(x => x.BudgetId);
             entity.Property(x => x.Amount).HasPrecision(18, 2);
+            entity.Property(x => x.Name).HasMaxLength(200);
             entity.HasOne(x => x.User).WithMany(u => u.Budgets).HasForeignKey(x => x.UserId);
-            entity.HasOne(x => x.Category).WithMany(c => c.Budgets).HasForeignKey(x => x.CategoryId);
+            entity.HasOne(x => x.Category).WithMany(c => c.Budgets).HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.SetNull);
         });
     }
 }

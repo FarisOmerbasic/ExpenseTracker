@@ -7,10 +7,12 @@ namespace ExpenseTracker.Application.Services;
 public class ExpenseService
 {
     private readonly IExpenseRepository _expenses;
+    private readonly IAccountRepository _accounts;
 
-    public ExpenseService(IExpenseRepository expenses)
+    public ExpenseService(IExpenseRepository expenses, IAccountRepository accounts)
     {
         _expenses = expenses;
+        _accounts = accounts;
     }
 
     public async Task<ExpenseDto?> GetAsync(int id, CancellationToken ct = default)
@@ -32,12 +34,25 @@ public class ExpenseService
             UserId = dto.UserId,
             CategoryId = dto.CategoryId,
             PaymentMethodId = dto.PaymentMethodId,
+            AccountId = dto.AccountId,
             Amount = dto.Amount,
             Date = dto.Date,
             Description = dto.Description
         };
 
         await _expenses.AddAsync(entity, ct);
+
+        // Deduct from account balance if linked
+        if (dto.AccountId.HasValue)
+        {
+            var account = await _accounts.GetAsync(dto.AccountId.Value, ct);
+            if (account is not null)
+            {
+                account.CurrentBalance -= dto.Amount;
+                await _accounts.UpdateAsync(account, ct);
+            }
+        }
+
         return Map(entity);
     }
 
@@ -46,14 +61,38 @@ public class ExpenseService
         var existing = await _expenses.GetAsync(id, ct);
         if (existing is null) return false;
 
+        // Reverse old account deduction
+        if (existing.AccountId.HasValue)
+        {
+            var oldAccount = await _accounts.GetAsync(existing.AccountId.Value, ct);
+            if (oldAccount is not null)
+            {
+                oldAccount.CurrentBalance += existing.Amount;
+                await _accounts.UpdateAsync(oldAccount, ct);
+            }
+        }
+
         existing.UserId = dto.UserId;
         existing.CategoryId = dto.CategoryId;
         existing.PaymentMethodId = dto.PaymentMethodId;
+        existing.AccountId = dto.AccountId;
         existing.Amount = dto.Amount;
         existing.Date = dto.Date;
         existing.Description = dto.Description;
 
         await _expenses.UpdateAsync(existing, ct);
+
+        // Apply new account deduction
+        if (dto.AccountId.HasValue)
+        {
+            var newAccount = await _accounts.GetAsync(dto.AccountId.Value, ct);
+            if (newAccount is not null)
+            {
+                newAccount.CurrentBalance -= dto.Amount;
+                await _accounts.UpdateAsync(newAccount, ct);
+            }
+        }
+
         return true;
     }
 
@@ -61,6 +100,17 @@ public class ExpenseService
     {
         var existing = await _expenses.GetAsync(id, ct);
         if (existing is null) return false;
+
+        // Restore account balance if linked
+        if (existing.AccountId.HasValue)
+        {
+            var account = await _accounts.GetAsync(existing.AccountId.Value, ct);
+            if (account is not null)
+            {
+                account.CurrentBalance += existing.Amount;
+                await _accounts.UpdateAsync(account, ct);
+            }
+        }
 
         await _expenses.DeleteAsync(existing, ct);
         return true;
@@ -73,6 +123,7 @@ public class ExpenseService
             UserId = expense.UserId,
             CategoryId = expense.CategoryId,
             PaymentMethodId = expense.PaymentMethodId,
+            AccountId = expense.AccountId,
             Amount = expense.Amount,
             Date = expense.Date,
             Description = expense.Description

@@ -70,8 +70,12 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -119,6 +123,9 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExpenseId"));
 
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
@@ -140,6 +147,8 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("ExpenseId");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("CategoryId");
 
@@ -226,8 +235,7 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
                     b.HasOne("ExpenseTracker.Domain.Entities.Category", "Category")
                         .WithMany("Budgets")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ExpenseTracker.Domain.Entities.User", "User")
                         .WithMany("Budgets")
@@ -253,6 +261,11 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ExpenseTracker.Domain.Entities.Expense", b =>
                 {
+                    b.HasOne("ExpenseTracker.Domain.Entities.Account", "Account")
+                        .WithMany("Expenses")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("ExpenseTracker.Domain.Entities.Category", "Category")
                         .WithMany("Expenses")
                         .HasForeignKey("CategoryId")
@@ -271,6 +284,8 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Account");
+
                     b.Navigation("Category");
 
                     b.Navigation("PaymentMethod");
@@ -287,6 +302,11 @@ namespace ExpenseTracker.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Domain.Entities.Account", b =>
+                {
+                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Domain.Entities.Category", b =>
