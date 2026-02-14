@@ -16,29 +16,13 @@ public class BudgetService
     public async Task<IReadOnlyList<BudgetDto>> GetByUserAsync(int userId, CancellationToken ct = default)
     {
         var items = await _budgets.GetByUserAsync(userId, ct);
-        return items
-            .Select(b => new BudgetDto
-            {
-                BudgetId = b.BudgetId,
-                UserId = b.UserId,
-                CategoryId = b.CategoryId,
-                Amount = b.Amount
-            })
-            .ToList();
+        return items.Select(Map).ToList();
     }
 
     public async Task<BudgetDto?> GetAsync(int id, CancellationToken ct = default)
     {
         var entity = await _budgets.GetAsync(id, ct);
-        return entity is null
-            ? null
-            : new BudgetDto
-            {
-                BudgetId = entity.BudgetId,
-                UserId = entity.UserId,
-                CategoryId = entity.CategoryId,
-                Amount = entity.Amount
-            };
+        return entity is null ? null : Map(entity);
     }
 
     public async Task<BudgetDto> CreateAsync(CreateBudgetDto dto, CancellationToken ct = default)
@@ -47,18 +31,12 @@ public class BudgetService
         {
             UserId = dto.UserId,
             CategoryId = dto.CategoryId,
+            Name = dto.Name,
             Amount = dto.Amount
         };
 
         await _budgets.AddAsync(entity, ct);
-
-        return new BudgetDto
-        {
-            BudgetId = entity.BudgetId,
-            UserId = entity.UserId,
-            CategoryId = entity.CategoryId,
-            Amount = entity.Amount
-        };
+        return Map(entity);
     }
 
     public async Task<bool> UpdateAsync(int id, CreateBudgetDto dto, CancellationToken ct = default)
@@ -68,6 +46,7 @@ public class BudgetService
 
         existing.UserId = dto.UserId;
         existing.CategoryId = dto.CategoryId;
+        existing.Name = dto.Name;
         existing.Amount = dto.Amount;
 
         await _budgets.UpdateAsync(existing, ct);
@@ -82,4 +61,13 @@ public class BudgetService
         await _budgets.DeleteAsync(existing, ct);
         return true;
     }
+
+    private static BudgetDto Map(Budget b) => new()
+    {
+        BudgetId = b.BudgetId,
+        UserId = b.UserId,
+        CategoryId = b.CategoryId,
+        Name = b.Name,
+        Amount = b.Amount
+    };
 }

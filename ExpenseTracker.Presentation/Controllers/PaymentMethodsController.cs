@@ -9,116 +9,61 @@ namespace ExpenseTracker.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class PaymentMethodsController : ControllerBase
+public class PaymentMethodsController(PaymentMethodService service) : ControllerBase
 {
-    private readonly PaymentMethodService _service;
-    private readonly ILogger<PaymentMethodsController> _logger;
-
-    public PaymentMethodsController(PaymentMethodService service, ILogger<PaymentMethodsController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PaymentMethodDto>> Get(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"PaymentMethodsController - Get invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var method = await _service.GetAsync(id, ct);
-            if (method is null) return NotFound();
-            if (method.UserId != userId.Value) return Forbid();
-            return Ok(method);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in PaymentMethodsController.Get");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var method = await service.GetAsync(id, ct);
+        if (method is null) return NotFound();
+        if (method.UserId != userId.Value) return Forbid();
+        return Ok(method);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PaymentMethodDto>>> GetMine(CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("PaymentMethodsController - GetMine invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var result = await _service.GetByUserAsync(userId.Value, ct);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in PaymentMethodsController.GetMine");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        return Ok(await service.GetByUserAsync(userId.Value, ct));
     }
 
     [HttpPost]
     public async Task<ActionResult<PaymentMethodDto>> Create(CreatePaymentMethodDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("PaymentMethodsController - Create invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            dto.UserId = userId.Value;
-            var created = await _service.CreateAsync(dto, ct);
-            return CreatedAtAction(nameof(Get), new { id = created.PaymentMethodId }, created);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in PaymentMethodsController.Create");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        dto.UserId = userId.Value;
+        var created = await service.CreateAsync(dto, ct);
+        return CreatedAtAction(nameof(Get), new { id = created.PaymentMethodId }, created);
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, CreatePaymentMethodDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"PaymentMethodsController - Update invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            dto.UserId = userId.Value;
-            var ok = await _service.UpdateAsync(id, dto, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in PaymentMethodsController.Update");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        dto.UserId = userId.Value;
+        var ok = await service.UpdateAsync(id, dto, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"PaymentMethodsController - Delete invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            var ok = await _service.DeleteAsync(id, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in PaymentMethodsController.Delete");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        var ok = await service.DeleteAsync(id, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 }

@@ -9,116 +9,61 @@ namespace ExpenseTracker.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class CategoriesController : ControllerBase
+public class CategoriesController(CategoryService service) : ControllerBase
 {
-    private readonly CategoryService _service;
-    private readonly ILogger<CategoriesController> _logger;
-
-    public CategoriesController(CategoryService service, ILogger<CategoriesController> logger)
-    {
-        _service = service;
-        _logger = logger;
-    }
-
     [HttpGet("{id:int}")]
     public async Task<ActionResult<CategoryDto>> Get(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"CategoriesController - Get invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var category = await _service.GetAsync(id, ct);
-            if (category is null) return NotFound();
-            if (category.UserId != userId.Value) return Forbid();
-            return Ok(category);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in CategoriesController.Get");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var category = await service.GetAsync(id, ct);
+        if (category is null) return NotFound();
+        if (category.UserId != userId.Value) return Forbid();
+        return Ok(category);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetMine(CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("CategoriesController - GetMine invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var result = await _service.GetByUserAsync(userId.Value, ct);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in CategoriesController.GetMine");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        return Ok(await service.GetByUserAsync(userId.Value, ct));
     }
 
     [HttpPost]
     public async Task<ActionResult<CategoryDto>> Create(CreateCategoryDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug("CategoriesController - Create invoked");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            dto.UserId = userId.Value;
-            var created = await _service.CreateAsync(dto, ct);
-            return CreatedAtAction(nameof(Get), new { id = created.CategoryId }, created);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in CategoriesController.Create");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        dto.UserId = userId.Value;
+        var created = await service.CreateAsync(dto, ct);
+        return CreatedAtAction(nameof(Get), new { id = created.CategoryId }, created);
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, CreateCategoryDto dto, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"CategoriesController - Update invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            dto.UserId = userId.Value;
-            var ok = await _service.UpdateAsync(id, dto, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in CategoriesController.Update");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        dto.UserId = userId.Value;
+        var ok = await service.UpdateAsync(id, dto, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id, CancellationToken ct)
     {
-        try
-        {
-            _logger.LogDebug($"CategoriesController - Delete invoked (id: {id})");
-            var userId = User.GetUserId();
-            if (userId is null) return Unauthorized();
-            var existing = await _service.GetAsync(id, ct);
-            if (existing is null) return NotFound();
-            if (existing.UserId != userId.Value) return Forbid();
-            var ok = await _service.DeleteAsync(id, ct);
-            if (!ok) return NotFound();
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Exception in CategoriesController.Delete");
-            throw;
-        }
+        var userId = User.GetUserId();
+        if (userId is null) return Unauthorized();
+        var existing = await service.GetAsync(id, ct);
+        if (existing is null) return NotFound();
+        if (existing.UserId != userId.Value) return Forbid();
+        var ok = await service.DeleteAsync(id, ct);
+        if (!ok) return NotFound();
+        return NoContent();
     }
 }
