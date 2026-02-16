@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Primary — rich indigo that feels premium & trustworthy */
+  
   --color-primary-50: #eef2ff;
   --color-primary-100: #e0e7ff;
   --color-primary-200: #c7d2fe;
@@ -14,7 +14,7 @@
   --color-primary-900: #312e81;
   --color-primary-950: #1e1b4b;
 
-  /* Surface — neutral greys with a hint of cool */
+  
   --color-surface-50: #f9fafb;
   --color-surface-100: #f3f4f6;
   --color-surface-200: #e5e7eb;
@@ -27,7 +27,7 @@
   --color-surface-900: #111827;
   --color-surface-950: #030712;
 
-  /* Accent — vibrant violet for pops of color */
+  
   --color-accent-50: #faf5ff;
   --color-accent-100: #f3e8ff;
   --color-accent-200: #e9d5ff;
@@ -36,7 +36,7 @@
   --color-accent-500: #a855f7;
   --color-accent-600: #9333ea;
 
-  /* Semantic Colors */
+  
   --color-success-50: #ecfdf5;
   --color-success-100: #d1fae5;
   --color-success-500: #10b981;

@@ -134,7 +134,7 @@ export default function BudgetsPage() {
         </Button>
       </div>
 
-      {/* Summary Card */}
+      
       {budgetData.length > 0 && (
         <Card className="bg-linear-to-br from-primary-600 via-primary-700 to-primary-900 border-none text-white">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -175,7 +175,7 @@ export default function BudgetsPage() {
         </Card>
       )}
 
-      {/* Budget Cards */}
+      
       {budgetData.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {budgetData.map((b) => (
@@ -271,7 +271,7 @@ export default function BudgetsPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <BudgetFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -283,7 +283,7 @@ export default function BudgetsPage() {
         categories={categories || []}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <BudgetFormModal
           isOpen={!!editing}
@@ -390,7 +390,7 @@ function BudgetFormModal({
       }
     >
       <div className="space-y-5">
-        {/* Budget Type Toggle */}
+        
         <div>
           <label className="block text-sm font-medium text-surface-700 mb-2">
             Budget Type

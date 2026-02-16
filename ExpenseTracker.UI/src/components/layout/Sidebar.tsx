@@ -55,7 +55,7 @@ export default function Sidebar({
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        {/* Logo */}
+        
         <div className="flex items-center justify-between px-5 h-16 shrink-0 border-b border-white/6">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center shadow-md shadow-primary-600/30">
@@ -73,7 +73,7 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Nav */}
+        
         <nav className="flex-1 px-3 pt-4 pb-4 space-y-1 overflow-y-auto">
           <p className="px-3.5 mb-2 text-[10px] font-semibold text-surface-600 uppercase tracking-widest">
             Menu
@@ -91,7 +91,7 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* Bottom */}
+        
         <div className="px-3 pb-3 space-y-1 border-t border-white/6 pt-3">
           <NavLink
             to="/settings"
@@ -110,7 +110,7 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* User */}
+        
         <div className="px-3 pb-4 pt-1">
           <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/4 border border-white/6">
             <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-semibold text-xs shrink-0 shadow-md shadow-primary-600/25">

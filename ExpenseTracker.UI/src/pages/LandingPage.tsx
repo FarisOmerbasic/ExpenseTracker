@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   TrendingDown,
@@ -14,8 +15,16 @@ import {
   Download,
   Terminal,
   CheckCircle2,
+  Loader2,
 } from 'lucide-react';
 import Button from '../components/common/Button';
+import { useAuth } from '../hooks/useAuth';
+import { useLandingData } from '../hooks/useLandingData';
+import {
+  donutSegments,
+  barHeights,
+  fmtCurrency,
+} from '../data/landingMock';
 
 const appFeatures = [
   {
@@ -88,16 +97,21 @@ const dashboardPages = [
 ];
 
 export default function LandingPage() {
+  const { isAuthenticated, user } = useAuth();
+  const { stats, categories: liveCategories, monthlyTrend, isLoading, currency, totalBalance, hasData } = useLandingData();
+  const fmt = (n: number) => fmtCurrency(n, currency);
+  const [hoveredMonthIndex, setHoveredMonthIndex] = useState<number | null>(null);
+
   return (
     <div className="min-h-screen bg-surface-950 text-white">
-      {/* Background — subtle, not distracting */}
+      
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 right-1/4 w-150 h-150 bg-primary-600/8 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/4 left-1/4 w-125 h-125 bg-emerald-500/6 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
-        {/* ────── Nav ────── */}
+        
         <nav className="flex items-center justify-between px-6 md:px-10 lg:px-16 h-16 max-w-6xl mx-auto">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center">
@@ -106,79 +120,115 @@ export default function LandingPage() {
             <span className="text-base font-bold tracking-tight">ExpenseTracker</span>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="text-surface-400 hover:text-white hover:bg-white/8">
-                Sign in
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button size="sm" className="shadow-md shadow-primary-600/20">
-                Get started
-                <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/dashboard">
+                <Button size="sm" className="shadow-md shadow-primary-600/20">
+                  Go to Dashboard
+                  <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" size="sm" className="text-surface-400 hover:text-white hover:bg-white/8">
+                    Sign in
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button size="sm" className="shadow-md shadow-primary-600/20">
+                    Get started
+                    <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </nav>
 
-        {/* ────── Hero ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 pt-20 sm:pt-28 pb-20 max-w-6xl mx-auto">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 text-surface-500 text-xs font-medium mb-6">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Smart budgeting &middot; Clear insights &middot; Easy tracking
+              {isAuthenticated ? (
+                <span>Welcome back, {user?.name} &middot; Live data</span>
+              ) : (
+                <span>Smart budgeting &middot; Clear insights &middot; Easy tracking</span>
+              )}
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-extrabold leading-[1.1] tracking-tight text-white">
-              Know where your
-              <br />
-              money goes.
+              {isAuthenticated ? (
+                <>Your finances,<br />at a glance.</>
+              ) : (
+                <>Know where your<br />money goes.</>
+              )}
             </h1>
 
             <p className="mt-5 text-base sm:text-lg text-surface-400 leading-relaxed max-w-lg">
-              A modern expense tracker built with React, .NET, and PostgreSQL.
-              Manage spending, set budgets, and understand your finances
-              with a clean and simple experience.
+              {isAuthenticated ? (
+                `Here's a real-time snapshot of your spending across all accounts.`
+              ) : (
+                `A modern expense tracker built with React, .NET, and PostgreSQL. Manage spending, set budgets, and understand your finances with a clean and simple experience.`
+              )}
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mt-8">
-              <Link to="/register">
-                <Button size="lg" className="shadow-lg shadow-primary-600/20" icon={<ArrowRight className="w-4 h-4" />}>
-                  Create your account
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button variant="ghost" size="lg" className="text-surface-400 hover:text-white hover:bg-white/6">
-                  I already have one
-                </Button>
-              </Link>
+              {isAuthenticated ? (
+                <Link to="/dashboard">
+                  <Button size="lg" className="shadow-lg shadow-primary-600/20" icon={<ArrowRight className="w-4 h-4" />}>
+                    Open Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/register">
+                    <Button size="lg" className="shadow-lg shadow-primary-600/20" icon={<ArrowRight className="w-4 h-4" />}>
+                      Create your account
+                    </Button>
+                  </Link>
+                  <Link to="/login">
+                    <Button variant="ghost" size="lg" className="text-surface-400 hover:text-white hover:bg-white/6">
+                      I already have one
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </section>
 
-        {/* ────── Dashboard preview ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 pb-24 max-w-6xl mx-auto">
           <div className="rounded-2xl border border-white/6 bg-white/2 p-1.5">
             <div className="rounded-xl bg-surface-900/60 border border-white/6 p-5 sm:p-6">
-              {/* Header bar */}
+              
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="text-xs text-surface-500 font-medium">Dashboard</span>
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs text-surface-500 font-medium">
+                    {hasData ? 'Live Data' : 'Dashboard'}
+                  </span>
                 </div>
                 <div className="flex gap-1.5">
+                  {isLoading && <Loader2 className="w-3 h-3 text-surface-500 animate-spin" />}
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                 </div>
               </div>
 
-              {/* Stat cards row */}
+              
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 mb-5">
                 {[
-                  { label: 'Total Spent', value: '$3,247.50', sub: 'All time' },
-                  { label: 'This Month', value: '$891.20', sub: '↓ 12% vs last' },
-                  { label: 'Transactions', value: '47', sub: 'This month' },
-                  { label: 'Categories', value: '6', sub: 'Active' },
+                  { label: 'Total Spent', value: fmt(stats.totalSpent), sub: 'All time' },
+                  {
+                    label: 'This Month',
+                    value: fmt(stats.thisMonth),
+                    sub: `${stats.monthChange <= 0 ? '↓' : '↑'} ${Math.abs(stats.monthChange)}% vs last`,
+                  },
+                  { label: 'Transactions', value: String(stats.transactionsThisMonth), sub: 'This month' },
+                  { label: 'Categories', value: String(stats.activeCategories), sub: 'Active' },
                 ].map((s) => (
                   <div key={s.label} className="bg-white/3 border border-white/6 rounded-lg p-3">
                     <p className="text-[10px] text-surface-500 uppercase tracking-wider mb-1">{s.label}</p>
@@ -188,58 +238,98 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              {/* Charts area */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-2.5">
-                {/* Area chart mock */}
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-2.5 items-start">
+                
                 <div className="lg:col-span-2 bg-white/3 border border-white/6 rounded-lg p-4">
-                  <p className="text-[10px] text-surface-500 uppercase tracking-wider mb-3">Spending Trend — 6 Months</p>
-                  <div className="h-28 flex items-end gap-1">
-                    {[30, 45, 35, 55, 40, 65, 50, 75, 55, 70, 45, 60, 50, 80, 60, 70, 55, 85, 65, 75, 50, 90, 70, 80].map((h, i) => (
+                  <p className="text-[10px] text-surface-500 uppercase tracking-wider mb-3">
+                    Spending Trend — {monthlyTrend.length} Months
+                  </p>
+                  <div className="h-32 flex items-end justify-between gap-2">
+                    {barHeights(monthlyTrend).map((b, i) => (
                       <div
                         key={i}
-                        className="flex-1 rounded-t-sm bg-primary-500/40"
-                        style={{ height: `${h}%`, opacity: 0.4 + (i / 24) * 0.6 }}
-                      />
+                        className="flex-1 flex flex-col items-center h-full relative"
+                        onMouseEnter={() => setHoveredMonthIndex(i)}
+                        onMouseLeave={() => setHoveredMonthIndex(null)}
+                      >
+                        {hoveredMonthIndex === i && (
+                          <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap rounded-md border border-white/10 bg-surface-900 px-3 py-2 shadow-lg shadow-black/30">
+                            <p className="text-[10px] text-surface-400 leading-none">{b.label}</p>
+                            <p className="text-xs text-white font-semibold mt-1.5 leading-none">{fmt(monthlyTrend[i]?.amount ?? 0)} spent</p>
+                          </div>
+                        )}
+                        <div className="flex-1 w-full flex items-end">
+                          <div
+                            className="w-full rounded-t-sm bg-primary-500 cursor-help"
+                            style={{
+                              height: `${Math.max(b.pct, 2)}%`,
+                              opacity: 0.5 + (i / Math.max(monthlyTrend.length - 1, 1)) * 0.5,
+                            }}
+                            title={`${b.label}: ${fmt(monthlyTrend[i]?.amount ?? 0)} spent`}
+                          />
+                        </div>
+                        <span className="text-[9px] text-surface-500 mt-1.5">{b.label}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
-                {/* Donut chart mock */}
+                
                 <div className="bg-white/3 border border-white/6 rounded-lg p-4">
                   <p className="text-[10px] text-surface-500 uppercase tracking-wider mb-3">By Category</p>
-                  <div className="flex items-center justify-center h-28">
-                    <div className="relative w-20 h-20">
+                  <div className="flex items-center justify-center h-32">
+                    <div className="relative w-24 h-24">
                       <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                         <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(99,102,241,0.15)" strokeWidth="4" />
-                        <circle cx="18" cy="18" r="14" fill="none" stroke="#818cf8" strokeWidth="4" strokeDasharray="30 70" strokeLinecap="round" />
-                        <circle cx="18" cy="18" r="14" fill="none" stroke="#34d399" strokeWidth="4" strokeDasharray="22 78" strokeDashoffset="-30" strokeLinecap="round" />
-                        <circle cx="18" cy="18" r="14" fill="none" stroke="#fbbf24" strokeWidth="4" strokeDasharray="18 82" strokeDashoffset="-52" strokeLinecap="round" />
-                        <circle cx="18" cy="18" r="14" fill="none" stroke="#f472b6" strokeWidth="4" strokeDasharray="15 85" strokeDashoffset="-70" strokeLinecap="round" />
+                        {donutSegments(liveCategories).map((seg, i) => (
+                          <circle
+                            key={i}
+                            cx="18"
+                            cy="18"
+                            r="14"
+                            fill="none"
+                            stroke={seg.color}
+                            strokeWidth="4"
+                            strokeDasharray={`${seg.dash} ${87.96 - seg.dash}`}
+                            strokeDashoffset={seg.offset}
+                            strokeLinecap="round"
+                            className="cursor-help"
+                            style={{ pointerEvents: 'all' }}
+                          >
+                            <title>{`${liveCategories[i]?.name ?? 'Category'}: ${fmt(liveCategories[i]?.amount ?? 0)} spent`}</title>
+                          </circle>
+                        ))}
                       </svg>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
-                    {[
-                      { c: 'bg-primary-400', l: 'Food' },
-                      { c: 'bg-emerald-400', l: 'Transport' },
-                      { c: 'bg-amber-400', l: 'Bills' },
-                      { c: 'bg-pink-400', l: 'Other' },
-                    ].map((d) => (
-                      <div key={d.l} className="flex items-center gap-1">
-                        <div className={`w-1.5 h-1.5 rounded-full ${d.c}`} />
-                        <span className="text-[9px] text-surface-500">{d.l}</span>
+                    {liveCategories.map((c) => (
+                      <div key={c.name} className="flex items-center gap-1" title={`${c.name}: ${fmt(c.amount)} spent`}>
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: c.color }} />
+                        <span className="text-[9px] text-surface-500">{c.name}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
+
+              
+              {hasData && totalBalance > 0 && (
+                <div className="mt-2.5 bg-white/3 border border-white/6 rounded-lg p-3 flex items-center justify-between">
+                  <span className="text-[10px] text-surface-500 uppercase tracking-wider">Total Balance (all accounts)</span>
+                  <span className="text-sm font-bold text-emerald-400">{fmt(totalBalance)}</span>
+                </div>
+              )}
             </div>
           </div>
           <p className="text-center text-[11px] text-surface-600 mt-3">
-            This is a preview of the actual dashboard you get after signing up.
+            {hasData
+              ? 'Showing real-time data from all accounts.'
+              : 'Data will appear here once expenses are tracked.'}
           </p>
         </section>
 
-        {/* ────── What you get (real features) ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
@@ -264,7 +354,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ────── 7 pages ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
@@ -294,7 +384,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ────── Tech stack ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="mb-12">
             <div className="flex items-center gap-2 mb-3">
@@ -319,7 +409,7 @@ export default function LandingPage() {
             ))}
           </div>
 
-          {/* Docker command */}
+          
           <div className="mt-8 bg-white/3 border border-white/6 rounded-xl p-5">
             <p className="text-xs text-surface-500 mb-3">Run the whole stack with one command:</p>
             <div className="flex items-center gap-3 bg-surface-950 rounded-lg px-4 py-3 font-mono text-sm">
@@ -341,27 +431,28 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ────── Honest pitch / CTA ────── */}
+        
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="bg-linear-to-br from-primary-600/20 to-primary-800/10 border border-primary-500/15 rounded-2xl px-8 py-12 sm:py-14 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              Start tracking today
+              {isAuthenticated ? 'Back to your dashboard' : 'Start tracking today'}
             </h2>
             <p className="text-surface-400 max-w-md mx-auto text-sm leading-relaxed mb-8">
-              Create your account and get a complete view of your expenses,
-              budgets, and monthly trends in minutes.
+              {isAuthenticated
+                ? 'Your data is ready. Jump back in and keep managing your finances.'
+                : 'Create your account and get a complete view of your expenses, budgets, and monthly trends in minutes.'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/register">
+              <Link to={isAuthenticated ? '/dashboard' : '/register'}>
                 <Button size="lg" className="shadow-lg shadow-primary-600/20 px-8" icon={<ArrowRight className="w-4 h-4" />}>
-                  Create account
+                  {isAuthenticated ? 'Open Dashboard' : 'Create account'}
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* ────── Footer ────── */}
+        
         <footer className="border-t border-white/6 px-6 md:px-10 lg:px-16 py-6 max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">

@@ -173,7 +173,7 @@ export default function PaymentMethodsPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <PaymentMethodFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -184,7 +184,7 @@ export default function PaymentMethodsPage() {
         userId={user?.userId || 0}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <PaymentMethodFormModal
           isOpen={!!editing}

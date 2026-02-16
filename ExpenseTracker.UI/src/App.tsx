@@ -7,7 +7,6 @@ import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
-// Lazy-loaded pages for code splitting
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ExpensesPage = lazy(() => import('./pages/ExpensesPage'));
@@ -33,17 +32,10 @@ function App() {
       <Router>
         <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-surface-50"><LoadingSpinner size="lg" /></div>}>
           <Routes>
-            {/* Public Landing */}
-            <Route
-              path="/"
-              element={
-                <AuthRedirect>
-                  <LandingPage />
-                </AuthRedirect>
-              }
-            />
+            
+            <Route path="/" element={<LandingPage />} />
 
-            {/* Auth Pages */}
+            
             <Route
               path="/login"
               element={
@@ -61,7 +53,7 @@ function App() {
               }
             />
 
-            {/* Protected App */}
+            
             <Route
               element={
                 <ProtectedRoute>
@@ -78,7 +70,7 @@ function App() {
               <Route path="settings" element={<SettingsPage />} />
             </Route>
 
-            {/* 404 */}
+            
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

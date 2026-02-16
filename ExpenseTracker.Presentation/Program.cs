@@ -43,6 +43,7 @@ builder.Services.AddScoped<PaymentMethodService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<BudgetService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ExpenseTracker.Presentation.Services.PublicStatsService>();
 
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
@@ -99,7 +100,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-// Auto-apply EF Core migrations on startup
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ExpenseTrackerDbContext>();

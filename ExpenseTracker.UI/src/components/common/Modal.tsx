@@ -53,17 +53,17 @@ export default function Modal({
         if (e.target === overlayRef.current) onClose();
       }}
     >
-      {/* Backdrop */}
+      
       <div className="absolute inset-0 bg-surface-950/40 backdrop-blur-sm animate-fade-in" />
 
-      {/* Panel */}
+      
       <div
         className={clsx(
           'relative w-full bg-white rounded-2xl shadow-2xl shadow-surface-950/10 border border-surface-100 animate-scale-in',
           sizeClasses[size]
         )}
       >
-        {/* Header */}
+        
         <div className="flex items-center justify-between px-6 py-4 border-b border-surface-100">
           <h2 className="text-lg font-bold text-surface-900">{title}</h2>
           <button
@@ -74,10 +74,10 @@ export default function Modal({
           </button>
         </div>
 
-        {/* Body */}
+        
         <div className="px-6 py-5 max-h-[60vh] overflow-y-auto">{children}</div>
 
-        {/* Footer */}
+        
         {footer && (
           <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-surface-100">
             {footer}

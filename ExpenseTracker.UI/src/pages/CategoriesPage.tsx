@@ -124,7 +124,7 @@ export default function CategoriesPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <CategoryFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -135,7 +135,7 @@ export default function CategoriesPage() {
         userId={user?.userId || 0}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <CategoryFormModal
           isOpen={!!editing}

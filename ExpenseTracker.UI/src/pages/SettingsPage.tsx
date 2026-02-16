@@ -75,7 +75,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar Tabs */}
+        
         <div className="lg:w-56 shrink-0">
           <Card padding="sm">
             <nav className="space-y-1">
@@ -97,7 +97,7 @@ export default function SettingsPage() {
           </Card>
         </div>
 
-        {/* Content */}
+        
         <div className="flex-1">
           {activeTab === 'profile' && (
             <Card>
@@ -105,7 +105,7 @@ export default function SettingsPage() {
                 Profile Information
               </h2>
 
-              {/* Avatar */}
+              
               <div className="flex items-center gap-5 mb-8">
                 <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary-600/25">
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
