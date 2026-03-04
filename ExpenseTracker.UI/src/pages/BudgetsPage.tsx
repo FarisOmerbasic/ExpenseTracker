@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Plus,
   PiggyBank,
@@ -25,12 +25,14 @@ import { expenseService } from '../services/expenseService';
 import { formatCurrency, getCategoryColor } from '../utils/formatters';
 import { extractApiError } from '../utils/helpers';
 import type { Budget, Category, Expense } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { startOfMonth, endOfMonth, parseISO, isWithinInterval } from 'date-fns';
 import toast from 'react-hot-toast';
 
 export default function BudgetsPage() {
   const { user } = useAuth();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Budgets');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<Budget | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -335,6 +337,16 @@ function BudgetFormModal({
   );
   const [amount, setAmount] = useState(budget ? String(budget.amount) : '');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setBudgetType(budget ? (budget.categoryId ? 'category' : 'overall') : 'category');
+      setName(budget?.name || '');
+      setCategoryId(budget?.categoryId ? String(budget.categoryId) : '');
+      setAmount(budget ? String(budget.amount) : '');
+      setErrors({});
+    }
+  }, [isOpen, budget]);
 
   const validate = () => {
     const errs: Record<string, string> = {};

@@ -1,27 +1,32 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Plus,
   Tag,
   Trash2,
   Edit3,
+  Receipt,
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Modal from '../components/common/Modal';
 import Input from '../components/common/Input';
+import Badge from '../components/common/Badge';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import EmptyState from '../components/common/EmptyState';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../hooks/useAuth';
 import { categoryService } from '../services/categoryService';
-import { getCategoryColor } from '../utils/formatters';
+import { expenseService } from '../services/expenseService';
+import { getCategoryColor, formatCurrency } from '../utils/formatters';
 import { extractApiError } from '../utils/helpers';
-import type { Category } from '../types';
+import type { Category, Expense } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 export default function CategoriesPage() {
   const { user } = useAuth();
+  usePageTitle('Categories');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -31,6 +36,22 @@ export default function CategoriesPage() {
     () => categoryService.getAll(),
     []
   );
+  const { data: expenses } = useApi<Expense[]>(
+    () => expenseService.getAll(),
+    []
+  );
+
+  const currency = user?.currencyPreference || 'USD';
+
+  const categoryStats = useMemo(() => {
+    if (!expenses || !categories) return new Map<number, { count: number; total: number }>();
+    const map = new Map<number, { count: number; total: number }>();
+    expenses.forEach((e) => {
+      const existing = map.get(e.categoryId) || { count: 0, total: 0 };
+      map.set(e.categoryId, { count: existing.count + 1, total: existing.total + e.amount });
+    });
+    return map;
+  }, [expenses, categories]);
 
   const handleDelete = async () => {
     if (!deletingId) return;
@@ -68,7 +89,9 @@ export default function CategoriesPage() {
 
       {categories && categories.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories.map((cat, index) => (
+          {categories.map((cat, index) => {
+            const stats = categoryStats.get(cat.categoryId);
+            return (
             <Card key={cat.categoryId} hover className="group">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -85,6 +108,12 @@ export default function CategoriesPage() {
                     <h3 className="text-sm font-semibold text-surface-900">
                       {cat.name}
                     </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="neutral" size="sm">
+                        <Receipt className="w-3 h-3 mr-1" />
+                        {stats?.count ?? 0} expense{(stats?.count ?? 0) !== 1 ? 's' : ''}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -102,8 +131,15 @@ export default function CategoriesPage() {
                   </button>
                 </div>
               </div>
+              {stats && stats.total > 0 && (
+                <div className="mt-3 pt-3 border-t border-surface-100 flex items-center justify-between">
+                  <span className="text-xs text-surface-500">Total spent</span>
+                  <span className="text-sm font-semibold text-surface-900">{formatCurrency(stats.total, currency)}</span>
+                </div>
+              )}
             </Card>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <Card>
@@ -177,6 +213,13 @@ function CategoryFormModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState(category?.name || '');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setName(category?.name || '');
+      setErrors({});
+    }
+  }, [isOpen, category]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
