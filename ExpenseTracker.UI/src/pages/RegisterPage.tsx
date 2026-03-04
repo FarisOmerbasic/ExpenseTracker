@@ -6,12 +6,14 @@ import Button from '../components/common/Button';
 import Select from '../components/common/Select';
 import { Mail, Lock, User, TrendingDown, ArrowRight, Check } from 'lucide-react';
 import { extractApiError } from '../utils/helpers';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { CURRENCY_OPTIONS } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
+  usePageTitle('Create Account');
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     name: '',

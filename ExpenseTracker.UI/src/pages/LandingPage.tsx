@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useAuth } from '../hooks/useAuth';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useLandingData } from '../hooks/useLandingData';
 import {
   donutSegments,
@@ -98,6 +99,7 @@ const dashboardPages = [
 
 export default function LandingPage() {
   const { isAuthenticated, user } = useAuth();
+  usePageTitle(isAuthenticated ? 'Welcome Back' : undefined);
   const { stats, categories: liveCategories, monthlyTrend, isLoading, currency, totalBalance, hasData } = useLandingData();
   const fmt = (n: number) => fmtCurrency(n, currency);
   const [hoveredMonthIndex, setHoveredMonthIndex] = useState<number | null>(null);

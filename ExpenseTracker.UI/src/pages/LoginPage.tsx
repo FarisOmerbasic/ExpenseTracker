@@ -5,11 +5,13 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import { Mail, Lock, TrendingDown, ArrowRight } from 'lucide-react';
 import { extractApiError } from '../utils/helpers';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  usePageTitle('Sign In');
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});

@@ -31,12 +31,14 @@ import { formatCurrency, formatDate, getCategoryColor } from '../utils/formatter
 import { exportToCsv, extractApiError } from '../utils/helpers';
 import { PAGE_SIZE } from '../utils/constants';
 import type { Expense, Category, PaymentMethod } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 export default function ExpensesPage() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Expenses');
   const [showAdd, setShowAdd] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);

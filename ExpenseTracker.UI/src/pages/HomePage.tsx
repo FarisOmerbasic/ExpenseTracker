@@ -39,6 +39,7 @@ import { categoryService } from '../services/categoryService';
 import { budgetService } from '../services/budgetService';
 import { formatCurrency, formatRelativeDate, getCategoryColor } from '../utils/formatters';
 import AddExpenseModal from '../components/expenses/AddExpenseModal';
+import { usePageTitle } from '../hooks/usePageTitle';
 import type { Expense, Category, Budget } from '../types';
 
 const CHART_PRIMARY = '#6366f1';
@@ -51,6 +52,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const currency = user?.currencyPreference || 'USD';
   const [showAddExpense, setShowAddExpense] = useState(false);
+  usePageTitle('Dashboard');
 
   const { data: expenses, isLoading: loadingExpenses, refetch: refetchExpenses } = useApi<Expense[]>(
     () => expenseService.getAll(),

@@ -24,6 +24,7 @@ import { formatCurrency } from '../utils/formatters';
 import { extractApiError } from '../utils/helpers';
 import { ACCOUNT_TYPES } from '../utils/constants';
 import type { Account } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 const accountTypeIcons: Record<string, React.ReactNode> = {
@@ -43,6 +44,7 @@ const accountTypeColors: Record<string, string> = {
 export default function AccountsPage() {
   const { user } = useAuth();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Accounts');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<Account | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
