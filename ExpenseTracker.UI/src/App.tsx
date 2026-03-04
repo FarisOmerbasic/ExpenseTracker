@@ -5,6 +5,8 @@ import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import ScrollToTop from './components/layout/ScrollToTop';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -30,6 +32,8 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
+        <ErrorBoundary>
         <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-surface-50"><LoadingSpinner size="lg" /></div>}>
           <Routes>
             
@@ -74,6 +78,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
+        </ErrorBoundary>
       </Router>
 
       <Toaster
