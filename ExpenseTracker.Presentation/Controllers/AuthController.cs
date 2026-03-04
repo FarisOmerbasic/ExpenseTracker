@@ -1,5 +1,6 @@
 using ExpenseTracker.Application.DTOs;
 using ExpenseTracker.Application.Services;
+using ExpenseTracker.Presentation.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,6 +62,25 @@ public class AuthController(AuthService service, IHostEnvironment env) : Control
 
         var ok = await service.ResetPasswordAsync(dto, ct);
         if (!ok) return BadRequest(new { message = "Invalid or expired reset token." });
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<ActionResult> ChangePassword(ChangePasswordDto dto, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(dto.CurrentPassword) || string.IsNullOrWhiteSpace(dto.NewPassword))
+            return BadRequest(new { message = "Current password and new password are required." });
+
+        if (dto.NewPassword.Length < 8)
+            return BadRequest(new { message = "New password must be at least 8 characters long." });
+
+        var userId = User.GetUserId();
+        if (userId is null)
+            return Unauthorized();
+
+        var ok = await service.ChangePasswordAsync(userId.Value, dto, ct);
+        if (!ok) return BadRequest(new { message = "Current password is incorrect." });
         return NoContent();
     }
 }

@@ -13,6 +13,7 @@ import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import { useAuth } from '../hooks/useAuth';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { userService } from '../services/userService';
 import { authService } from '../services/authService';
 import { extractApiError } from '../utils/helpers';
@@ -21,6 +22,7 @@ import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuth();
+  usePageTitle('Settings');
   const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState({
     name: user?.name || '',
@@ -256,8 +258,8 @@ export default function SettingsPage() {
                       toast.error('Please fill in all password fields');
                       return;
                     }
-                    if (passwordForm.newPassword.length < 6) {
-                      toast.error('New password must be at least 6 characters');
+                    if (passwordForm.newPassword.length < 8) {
+                      toast.error('New password must be at least 8 characters');
                       return;
                     }
                     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
@@ -266,8 +268,8 @@ export default function SettingsPage() {
                     }
                     setIsChangingPassword(true);
                     try {
-                      await authService.confirmPasswordReset({
-                        token: passwordForm.currentPassword,
+                      await authService.changePassword({
+                        currentPassword: passwordForm.currentPassword,
                         newPassword: passwordForm.newPassword,
                       });
                       toast.success('Password updated!');

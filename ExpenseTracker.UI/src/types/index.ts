@@ -37,6 +37,11 @@ export interface PasswordResetConfirmDto {
   newPassword: string;
 }
 
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface Account {
   accountId: number;
   userId: number;
