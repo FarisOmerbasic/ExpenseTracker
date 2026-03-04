@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Home, ArrowLeft } from 'lucide-react';
 import Button from '../components/common/Button';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 export default function NotFoundPage() {
+  usePageTitle('Page Not Found');
   return (
     <div className="min-h-screen bg-surface-50 flex items-center justify-center px-6">
       <div className="text-center animate-fade-in">

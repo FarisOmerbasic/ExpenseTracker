@@ -31,12 +31,14 @@ import { formatCurrency, formatDate, getCategoryColor } from '../utils/formatter
 import { exportToCsv, extractApiError } from '../utils/helpers';
 import { PAGE_SIZE } from '../utils/constants';
 import type { Expense, Category, PaymentMethod } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 export default function ExpensesPage() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Expenses');
   const [showAdd, setShowAdd] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -128,7 +130,7 @@ export default function ExpensesPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
+      
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Expenses</h1>
@@ -177,7 +179,7 @@ export default function ExpensesPage() {
         </div>
       </div>
 
-      {/* Filters */}
+      
       <Card>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
@@ -229,7 +231,7 @@ export default function ExpensesPage() {
           </div>
         </div>
 
-        {/* Summary bar */}
+        
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-surface-100">
           <p className="text-sm text-surface-500">
             Showing <span className="font-semibold text-surface-900">{filtered.length}</span> expenses
@@ -243,7 +245,7 @@ export default function ExpensesPage() {
         </div>
       </Card>
 
-      {/* Table */}
+      
       {paginated.length > 0 ? (
         <Card padding="none">
           <div className="overflow-x-auto">
@@ -344,7 +346,7 @@ export default function ExpensesPage() {
             </table>
           </div>
 
-          {/* Pagination */}
+          
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-6 py-4 border-t border-surface-100">
               <p className="text-sm text-surface-500">
@@ -420,7 +422,7 @@ export default function ExpensesPage() {
         </Card>
       )}
 
-      {/* Modals */}
+      
       <AddExpenseModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}

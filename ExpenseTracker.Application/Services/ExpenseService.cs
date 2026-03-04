@@ -42,7 +42,7 @@ public class ExpenseService
 
         await _expenses.AddAsync(entity, ct);
 
-        // Deduct from account balance if linked
+        
         if (dto.AccountId.HasValue)
         {
             var account = await _accounts.GetAsync(dto.AccountId.Value, ct);
@@ -61,7 +61,7 @@ public class ExpenseService
         var existing = await _expenses.GetAsync(id, ct);
         if (existing is null) return false;
 
-        // Reverse old account deduction
+        
         if (existing.AccountId.HasValue)
         {
             var oldAccount = await _accounts.GetAsync(existing.AccountId.Value, ct);
@@ -82,7 +82,7 @@ public class ExpenseService
 
         await _expenses.UpdateAsync(existing, ct);
 
-        // Apply new account deduction
+        
         if (dto.AccountId.HasValue)
         {
             var newAccount = await _accounts.GetAsync(dto.AccountId.Value, ct);
@@ -101,7 +101,7 @@ public class ExpenseService
         var existing = await _expenses.GetAsync(id, ct);
         if (existing is null) return false;
 
-        // Restore account balance if linked
+        
         if (existing.AccountId.HasValue)
         {
             var account = await _accounts.GetAsync(existing.AccountId.Value, ct);

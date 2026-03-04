@@ -24,6 +24,7 @@ import { formatCurrency } from '../utils/formatters';
 import { extractApiError } from '../utils/helpers';
 import { ACCOUNT_TYPES } from '../utils/constants';
 import type { Account } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 const accountTypeIcons: Record<string, React.ReactNode> = {
@@ -43,6 +44,7 @@ const accountTypeColors: Record<string, string> = {
 export default function AccountsPage() {
   const { user } = useAuth();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Accounts');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<Account | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -89,7 +91,7 @@ export default function AccountsPage() {
         </Button>
       </div>
 
-      {/* Total Balance */}
+      
       {accounts && accounts.length > 0 && (
         <Card className="bg-linear-to-br from-surface-900 via-surface-800 to-surface-900 border-none text-white">
           <div className="flex items-center justify-between">
@@ -106,7 +108,7 @@ export default function AccountsPage() {
         </Card>
       )}
 
-      {/* Account Cards */}
+      
       {accounts && accounts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {accounts.map((account) => {
@@ -199,7 +201,7 @@ export default function AccountsPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <AccountFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -210,7 +212,7 @@ export default function AccountsPage() {
         userId={user?.userId || 0}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <AccountFormModal
           isOpen={!!editing}

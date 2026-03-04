@@ -5,6 +5,7 @@ import type {
   CreateUserDto,
   PasswordResetRequestDto,
   PasswordResetConfirmDto,
+  ChangePasswordDto,
 } from '../types';
 
 export const authService = {
@@ -19,4 +20,7 @@ export const authService = {
 
   confirmPasswordReset: (data: PasswordResetConfirmDto) =>
     api.post('/auth/password-reset/confirm', data),
+
+  changePassword: (data: ChangePasswordDto) =>
+    api.post('/auth/change-password', data),
 };

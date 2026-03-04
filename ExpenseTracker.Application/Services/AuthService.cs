@@ -97,6 +97,25 @@ public class AuthService
         return true;
     }
 
+    public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto dto, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(dto.CurrentPassword) || string.IsNullOrWhiteSpace(dto.NewPassword))
+            return false;
+
+        if (dto.NewPassword.Length < 8)
+            return false;
+
+        var user = await _users.GetAsync(userId, ct);
+        if (user is null) return false;
+
+        if (!_passwordHasher.Verify(dto.CurrentPassword, user.PasswordHash))
+            return false;
+
+        user.PasswordHash = _passwordHasher.Hash(dto.NewPassword);
+        await _users.UpdateAsync(user, ct);
+        return true;
+    }
+
     private AuthResponseDto BuildResponse(User user)
     {
         var token = _tokenService.CreateToken(user);

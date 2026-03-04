@@ -8,32 +8,25 @@ export function extractApiError(
 
   const axiosError = error as AxiosError<{ message?: string; title?: string; errors?: Record<string, string[]> }>;
 
-  // Try structured error response
   if (axiosError.response?.data) {
     const data = axiosError.response.data;
 
-    // Standard message field
     if (typeof data.message === 'string') return data.message;
 
-    // ASP.NET ProblemDetails title
     if (typeof data.title === 'string') return data.title;
 
-    // ASP.NET validation errors
     if (data.errors) {
       const firstError = Object.values(data.errors).flat()[0];
       if (firstError) return firstError;
     }
 
-    // Plain string response
     if (typeof data === 'string') return data;
   }
 
-  // Network error
   if (axiosError.message === 'Network Error') {
     return 'Unable to connect to the server. Please check your connection.';
   }
 
-  // Status code fallbacks
   if (axiosError.response?.status === 401) return 'Session expired. Please log in again.';
   if (axiosError.response?.status === 403) return 'You do not have permission for this action.';
   if (axiosError.response?.status === 404) return 'The requested resource was not found.';
@@ -45,12 +38,9 @@ export function extractApiError(
 
 export function toDateInputValue(dateStr: string): string {
   if (!dateStr) return '';
-  // Already in yyyy-MM-dd format
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-  // ISO datetime string — extract date portion
   const match = dateStr.match(/^(\d{4}-\d{2}-\d{2})/);
   if (match) return match[1];
-  // Try Date parsing as fallback
   const d = new Date(dateStr);
   if (!isNaN(d.getTime())) {
     return d.toISOString().slice(0, 10);
@@ -71,7 +61,6 @@ export function exportToCsv<T extends Record<string, unknown>>(
       .map((c) => {
         const val = row[c.key];
         const str = val === null || val === undefined ? '' : String(val);
-        // Escape quotes and wrap in quotes if contains comma/quote/newline
         if (str.includes(',') || str.includes('"') || str.includes('\n')) {
           return `"${str.replace(/"/g, '""')}"`;
         }

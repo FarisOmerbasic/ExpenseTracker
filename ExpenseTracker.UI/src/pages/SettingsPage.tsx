@@ -13,6 +13,7 @@ import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import { useAuth } from '../hooks/useAuth';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { userService } from '../services/userService';
 import { authService } from '../services/authService';
 import { extractApiError } from '../utils/helpers';
@@ -21,6 +22,7 @@ import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuth();
+  usePageTitle('Settings');
   const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState({
     name: user?.name || '',
@@ -75,7 +77,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar Tabs */}
+        
         <div className="lg:w-56 shrink-0">
           <Card padding="sm">
             <nav className="space-y-1">
@@ -97,7 +99,7 @@ export default function SettingsPage() {
           </Card>
         </div>
 
-        {/* Content */}
+        
         <div className="flex-1">
           {activeTab === 'profile' && (
             <Card>
@@ -105,7 +107,7 @@ export default function SettingsPage() {
                 Profile Information
               </h2>
 
-              {/* Avatar */}
+              
               <div className="flex items-center gap-5 mb-8">
                 <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary-600/25">
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
@@ -256,8 +258,8 @@ export default function SettingsPage() {
                       toast.error('Please fill in all password fields');
                       return;
                     }
-                    if (passwordForm.newPassword.length < 6) {
-                      toast.error('New password must be at least 6 characters');
+                    if (passwordForm.newPassword.length < 8) {
+                      toast.error('New password must be at least 8 characters');
                       return;
                     }
                     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
@@ -266,8 +268,8 @@ export default function SettingsPage() {
                     }
                     setIsChangingPassword(true);
                     try {
-                      await authService.confirmPasswordReset({
-                        token: passwordForm.currentPassword,
+                      await authService.changePassword({
+                        currentPassword: passwordForm.currentPassword,
                         newPassword: passwordForm.newPassword,
                       });
                       toast.success('Password updated!');

@@ -39,6 +39,7 @@ import { categoryService } from '../services/categoryService';
 import { budgetService } from '../services/budgetService';
 import { formatCurrency, formatRelativeDate, getCategoryColor } from '../utils/formatters';
 import AddExpenseModal from '../components/expenses/AddExpenseModal';
+import { usePageTitle } from '../hooks/usePageTitle';
 import type { Expense, Category, Budget } from '../types';
 
 const CHART_PRIMARY = '#6366f1';
@@ -51,6 +52,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const currency = user?.currencyPreference || 'USD';
   const [showAddExpense, setShowAddExpense] = useState(false);
+  usePageTitle('Dashboard');
 
   const { data: expenses, isLoading: loadingExpenses, refetch: refetchExpenses } = useApi<Expense[]>(
     () => expenseService.getAll(),
@@ -193,7 +195,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-7 animate-fade-in">
-      {/* Header */}
+      
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-surface-900">
@@ -213,7 +215,7 @@ export default function HomePage() {
         </Button>
       </div>
 
-      {/* Stats */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Spent"
@@ -242,9 +244,9 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Charts Row */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Spending Trend */}
+        
         <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -301,7 +303,7 @@ export default function HomePage() {
           )}
         </Card>
 
-        {/* Category Breakdown */}
+        
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -367,9 +369,9 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* Bottom Row */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Recent Transactions */}
+        
         <Card className="lg:col-span-2" padding="none">
           <div className="flex items-center justify-between p-6 pb-4">
             <div>
@@ -449,7 +451,7 @@ export default function HomePage() {
           )}
         </Card>
 
-        {/* Budget Progress */}
+        
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -501,7 +503,7 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* Daily spending (bar chart) */}
+      
       {expenses && expenses.length > 0 && (
         <Card>
           <div className="flex items-center justify-between mb-6">
@@ -514,7 +516,7 @@ export default function HomePage() {
         </Card>
       )}
 
-      {/* Add Expense Modal */}
+      
       <AddExpenseModal
         isOpen={showAddExpense}
         onClose={() => setShowAddExpense(false)}

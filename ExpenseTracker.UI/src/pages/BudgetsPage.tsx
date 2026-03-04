@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Plus,
   PiggyBank,
@@ -25,12 +25,14 @@ import { expenseService } from '../services/expenseService';
 import { formatCurrency, getCategoryColor } from '../utils/formatters';
 import { extractApiError } from '../utils/helpers';
 import type { Budget, Category, Expense } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { startOfMonth, endOfMonth, parseISO, isWithinInterval } from 'date-fns';
 import toast from 'react-hot-toast';
 
 export default function BudgetsPage() {
   const { user } = useAuth();
   const currency = user?.currencyPreference || 'USD';
+  usePageTitle('Budgets');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<Budget | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -134,7 +136,7 @@ export default function BudgetsPage() {
         </Button>
       </div>
 
-      {/* Summary Card */}
+      
       {budgetData.length > 0 && (
         <Card className="bg-linear-to-br from-primary-600 via-primary-700 to-primary-900 border-none text-white">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -175,7 +177,7 @@ export default function BudgetsPage() {
         </Card>
       )}
 
-      {/* Budget Cards */}
+      
       {budgetData.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {budgetData.map((b) => (
@@ -271,7 +273,7 @@ export default function BudgetsPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <BudgetFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -283,7 +285,7 @@ export default function BudgetsPage() {
         categories={categories || []}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <BudgetFormModal
           isOpen={!!editing}
@@ -335,6 +337,16 @@ function BudgetFormModal({
   );
   const [amount, setAmount] = useState(budget ? String(budget.amount) : '');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setBudgetType(budget ? (budget.categoryId ? 'category' : 'overall') : 'category');
+      setName(budget?.name || '');
+      setCategoryId(budget?.categoryId ? String(budget.categoryId) : '');
+      setAmount(budget ? String(budget.amount) : '');
+      setErrors({});
+    }
+  }, [isOpen, budget]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -390,7 +402,7 @@ function BudgetFormModal({
       }
     >
       <div className="space-y-5">
-        {/* Budget Type Toggle */}
+        
         <div>
           <label className="block text-sm font-medium text-surface-700 mb-2">
             Budget Type

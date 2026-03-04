@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Plus,
   CreditCard,
@@ -26,6 +26,7 @@ import { paymentMethodService } from '../services/paymentMethodService';
 import { extractApiError } from '../utils/helpers';
 import { PAYMENT_METHOD_TYPES } from '../utils/constants';
 import type { PaymentMethod } from '../types';
+import { usePageTitle } from '../hooks/usePageTitle';
 import toast from 'react-hot-toast';
 
 const typeIcons: Record<string, React.ReactNode> = {
@@ -60,6 +61,7 @@ const typeColors: Record<string, string> = {
 
 export default function PaymentMethodsPage() {
   const { user } = useAuth();
+  usePageTitle('Payment Methods');
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<PaymentMethod | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -173,7 +175,7 @@ export default function PaymentMethodsPage() {
         </Card>
       )}
 
-      {/* Add Modal */}
+      
       <PaymentMethodFormModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
@@ -184,7 +186,7 @@ export default function PaymentMethodsPage() {
         userId={user?.userId || 0}
       />
 
-      {/* Edit Modal */}
+      
       {editing && (
         <PaymentMethodFormModal
           isOpen={!!editing}
@@ -227,6 +229,14 @@ function PaymentMethodFormModal({
   const [name, setName] = useState(method?.name || '');
   const [type, setType] = useState(method?.type || 'Debit Card');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setName(method?.name || '');
+      setType(method?.type || 'Debit Card');
+      setErrors({});
+    }
+  }, [isOpen, method]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
