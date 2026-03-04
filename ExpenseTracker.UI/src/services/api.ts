@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -20,8 +21,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      const hadToken = !!localStorage.getItem('accessToken');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
+      if (hadToken) {
+        toast.error('Session expired. Please sign in again.');
+      }
       window.location.href = '/login';
     }
     return Promise.reject(error);
