@@ -42,8 +42,8 @@ import AddExpenseModal from '../components/expenses/AddExpenseModal';
 import { usePageTitle } from '../hooks/usePageTitle';
 import type { Expense, Category, Budget } from '../types';
 
-const CHART_PRIMARY = '#6366f1';
-const CHART_BAR = '#818cf8';
+const CHART_PRIMARY = '#5c5ce6';
+const CHART_BAR = '#7b7ff8';
 const CHART_GRID = '#f3f4f6';
 const CHART_TICK = '#9ca3af';
 
@@ -199,11 +199,10 @@ export default function HomePage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-surface-900">
-            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'},{' '}
-            {user?.name?.split(' ')[0] || 'there'} 👋
+            Welcome back, {user?.name?.split(' ')[0] || 'there'}
           </h1>
           <p className="text-surface-500 mt-1">
-            Here's what's happening with your expenses
+            Your spending overview for this month
           </p>
         </div>
         <Button
@@ -250,8 +249,8 @@ export default function HomePage() {
         <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-surface-900">Spending Trend</h3>
-              <p className="text-sm text-surface-500">Last 6 months overview</p>
+              <h3 className="text-base font-bold text-surface-900">Trend</h3>
+              <p className="text-sm text-surface-500">Last 6 months</p>
             </div>
             <Badge variant="primary">
               <TrendingUp className="w-3 h-3 mr-1" />
@@ -297,8 +296,8 @@ export default function HomePage() {
           ) : (
             <EmptyState
               icon={<TrendingUp className="w-8 h-8" />}
-              title="No trend data yet"
-              description="Add expenses to see your spending trend"
+              title="No data yet"
+              description="Start adding expenses to see your monthly trend"
             />
           )}
         </Card>
@@ -307,8 +306,8 @@ export default function HomePage() {
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-surface-900">By Category</h3>
-              <p className="text-sm text-surface-500">Expense distribution</p>
+              <h3 className="text-base font-bold text-surface-900">Categories</h3>
+              <p className="text-sm text-surface-500">Where money goes</p>
             </div>
           </div>
           {categoryData.length > 0 ? (
@@ -362,8 +361,8 @@ export default function HomePage() {
           ) : (
             <EmptyState
               icon={<Tag className="w-8 h-8" />}
-              title="No categories yet"
-              description="Create categories and add expenses"
+              title="No categories"
+              description="Set up categories first, then add expenses"
             />
           )}
         </Card>
@@ -376,10 +375,10 @@ export default function HomePage() {
           <div className="flex items-center justify-between p-6 pb-4">
             <div>
               <h3 className="text-base font-bold text-surface-900">
-                Recent Transactions
+                Recent
               </h3>
               <p className="text-sm text-surface-500">
-                Your latest expenses
+                Latest expenses
               </p>
             </div>
             <Button variant="ghost" size="sm" onClick={() => navigate('/expenses')}>
@@ -435,8 +434,8 @@ export default function HomePage() {
             <div className="px-6 pb-6">
               <EmptyState
                 icon={<Receipt className="w-8 h-8" />}
-                title="No transactions yet"
-                description="Add your first expense to get started"
+                title="No transactions"
+                description="Your recent expenses will show up here"
                 action={
                   <Button
                     size="sm"
@@ -455,8 +454,8 @@ export default function HomePage() {
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-surface-900">Budget Overview</h3>
-              <p className="text-sm text-surface-500">This month's progress</p>
+              <h3 className="text-base font-bold text-surface-900">Budgets</h3>
+              <p className="text-sm text-surface-500">This month</p>
             </div>
           </div>
 
@@ -496,8 +495,8 @@ export default function HomePage() {
           ) : (
             <EmptyState
               icon={<CreditCard className="w-8 h-8" />}
-              title="No budgets set"
-              description="Create budgets to track your spending limits"
+              title="No budgets"
+              description="Create a budget to keep your spending in check"
             />
           )}
         </Card>
@@ -508,8 +507,8 @@ export default function HomePage() {
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-surface-900">Daily Spending</h3>
-              <p className="text-sm text-surface-500">This month's daily breakdown</p>
+              <h3 className="text-base font-bold text-surface-900">Daily</h3>
+              <p className="text-sm text-surface-500">This month's breakdown</p>
             </div>
           </div>
           <DailySpendingChart expenses={expenses} currency={currency} />
