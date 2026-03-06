@@ -30,32 +30,32 @@ import {
 const appFeatures = [
   {
     icon: Receipt,
-    title: 'Full expense management',
-    desc: 'Add, edit, delete, search, filter by category, sort by date or amount. Paginated table with real-time totals.',
+    title: 'Full expense tracking',
+    desc: 'Add, edit, search, filter by category, sort by date or amount. Pagination and totals built in.',
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/20',
   },
   {
     icon: PiggyBank,
-    title: 'Budgets that actually track',
-    desc: 'Set monthly limits per category. See live progress bars, remaining amounts, and over-budget warnings.',
+    title: 'Budget tracking',
+    desc: 'Monthly limits per category with progress bars, remaining amounts, and warnings when you go over.',
     color: 'text-amber-400',
     bg: 'bg-amber-500/10',
     border: 'border-amber-500/20',
   },
   {
     icon: BarChart3,
-    title: 'Three chart types, zero fluff',
-    desc: 'Area chart for 6-month trends. Donut for category breakdown. Bar chart for daily spending this month.',
+    title: 'Charts and breakdowns',
+    desc: 'Area chart for 6-month trends, donut for categories, bar chart for daily spending this month.',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10',
     border: 'border-blue-500/20',
   },
   {
     icon: Wallet,
-    title: 'Multi-account support',
-    desc: 'Checking, savings, cash, credit card, investment — each with its own balance tracking.',
+    title: 'Multiple accounts',
+    desc: 'Checking, savings, cash, credit, investment — each with its own balance.',
     color: 'text-violet-400',
     bg: 'bg-violet-500/10',
     border: 'border-violet-500/20',
@@ -63,7 +63,7 @@ const appFeatures = [
   {
     icon: CreditCard,
     title: 'Payment methods',
-    desc: 'Card, cash, mobile payment, bank transfer. Every expense linked to how you actually paid.',
+    desc: 'Card, cash, mobile, bank transfer. Every expense tied to how you paid.',
     color: 'text-rose-400',
     bg: 'bg-rose-500/10',
     border: 'border-rose-500/20',
@@ -71,7 +71,7 @@ const appFeatures = [
   {
     icon: Download,
     title: 'CSV export',
-    desc: 'Export filtered expenses to CSV. Date, description, category, payment method, amount — all included.',
+    desc: 'Export filtered expenses with date, description, category, payment method, and amount.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-500/10',
     border: 'border-cyan-500/20',
@@ -79,12 +79,12 @@ const appFeatures = [
 ];
 
 const techStack = [
-  { label: 'React + TypeScript', detail: 'Vite-powered frontend' },
-  { label: 'ASP.NET Core', detail: 'Clean architecture API' },
-  { label: 'PostgreSQL', detail: 'Reliable data storage' },
-  { label: 'Docker Compose', detail: 'One command to run' },
-  { label: 'JWT Auth', detail: 'Secure token-based' },
-  { label: 'Tailwind CSS v4', detail: 'Utility-first styling' },
+  { label: 'React + TypeScript', detail: 'Vite frontend' },
+  { label: 'ASP.NET Core', detail: 'Clean arch API' },
+  { label: 'PostgreSQL', detail: 'Data storage' },
+  { label: 'Docker Compose', detail: 'One-command setup' },
+  { label: 'JWT Auth', detail: 'Token-based' },
+  { label: 'Tailwind CSS v4', detail: 'Utility-first' },
 ];
 
 const dashboardPages = [
@@ -153,9 +153,9 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 text-surface-500 text-xs font-medium mb-6">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               {isAuthenticated ? (
-                <span>Welcome back, {user?.name} &middot; Live data</span>
+                <span>Welcome back, {user?.name}</span>
               ) : (
-                <span>Smart budgeting &middot; Clear insights &middot; Easy tracking</span>
+                <span>Open source &middot; Self-hosted &middot; Yours to keep</span>
               )}
             </div>
 
@@ -163,15 +163,15 @@ export default function LandingPage() {
               {isAuthenticated ? (
                 <>Your finances,<br />at a glance.</>
               ) : (
-                <>Know where your<br />money goes.</>
+                <>Track your<br />spending.</>
               )}
             </h1>
 
             <p className="mt-5 text-base sm:text-lg text-surface-400 leading-relaxed max-w-lg">
               {isAuthenticated ? (
-                `Here's a real-time snapshot of your spending across all accounts.`
+                `A snapshot of your spending across all accounts.`
               ) : (
-                `A modern expense tracker built with React, .NET, and PostgreSQL. Manage spending, set budgets, and understand your finances with a clean and simple experience.`
+                `An expense tracker built with React, .NET, and PostgreSQL. Budgets, categories, accounts, charts — nothing fancy, just the stuff you need.`
               )}
             </p>
 
@@ -326,8 +326,8 @@ export default function LandingPage() {
           </div>
           <p className="text-center text-[11px] text-surface-600 mt-3">
             {hasData
-              ? 'Showing real-time data from all accounts.'
-              : 'Data will appear here once expenses are tracked.'}
+              ? 'Showing live data from all users.'
+              : 'Data appears here once expenses are tracked.'}
           </p>
         </section>
 
@@ -335,10 +335,10 @@ export default function LandingPage() {
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              What's actually inside
+              Features
             </h2>
             <p className="mt-3 text-surface-400 max-w-lg leading-relaxed">
-              No vague promises. Here's every feature, built and working.
+              Everything that's built in, nothing behind a paywall.
             </p>
           </div>
 
@@ -360,10 +360,10 @@ export default function LandingPage() {
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              7 pages, all functional
+              Pages
             </h2>
             <p className="mt-3 text-surface-400 max-w-lg leading-relaxed">
-              Every page has full CRUD operations. Nothing is a placeholder.
+              Seven pages, all with full CRUD. No placeholder screens.
             </p>
           </div>
 
@@ -394,11 +394,11 @@ export default function LandingPage() {
               <span className="text-xs font-medium text-surface-500 uppercase tracking-wider">Tech Stack</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Built with real tools
+              Stack
             </h2>
             <p className="mt-3 text-surface-400 max-w-lg leading-relaxed">
-              Production-grade stack. Clean architecture on the backend,
-              modern React on the frontend, PostgreSQL for data.
+              Clean architecture backend, React frontend, PostgreSQL for data.
+              Runs with a single Docker Compose command.
             </p>
           </div>
 
@@ -413,7 +413,7 @@ export default function LandingPage() {
 
           
           <div className="mt-8 bg-white/3 border border-white/6 rounded-xl p-5">
-            <p className="text-xs text-surface-500 mb-3">Run the whole stack with one command:</p>
+            <p className="text-xs text-surface-500 mb-3">Run everything:</p>
             <div className="flex items-center gap-3 bg-surface-950 rounded-lg px-4 py-3 font-mono text-sm">
               <span className="text-emerald-400">$</span>
               <code className="text-surface-300">docker compose up --build -d</code>
@@ -437,12 +437,12 @@ export default function LandingPage() {
         <section className="px-6 md:px-10 lg:px-16 py-20 max-w-6xl mx-auto border-t border-white/6">
           <div className="bg-linear-to-br from-primary-600/20 to-primary-800/10 border border-primary-500/15 rounded-2xl px-8 py-12 sm:py-14 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              {isAuthenticated ? 'Back to your dashboard' : 'Start tracking today'}
+              {isAuthenticated ? 'Back to your dashboard' : 'Try it out'}
             </h2>
             <p className="text-surface-400 max-w-md mx-auto text-sm leading-relaxed mb-8">
               {isAuthenticated
-                ? 'Your data is ready. Jump back in and keep managing your finances.'
-                : 'Create your account and get a complete view of your expenses, budgets, and monthly trends in minutes.'}
+                ? 'Your data is ready. Pick up where you left off.'
+                : 'Create an account and start tracking your expenses in a couple of minutes.'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to={isAuthenticated ? '/dashboard' : '/register'}>
@@ -466,10 +466,6 @@ export default function LandingPage() {
             <div className="flex items-center gap-4">
               <p className="text-[11px] text-surface-600">
                 &copy; {new Date().getFullYear()} ExpenseTracker
-              </p>
-              <span className="text-surface-700">&middot;</span>
-              <p className="text-[11px] text-surface-600">
-                All rights reserved
               </p>
             </div>
           </div>

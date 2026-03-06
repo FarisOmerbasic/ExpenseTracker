@@ -125,7 +125,7 @@ export default function BudgetsPage() {
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Budgets</h1>
           <p className="text-surface-500 mt-1">
-            Set spending limits per category or for the whole month
+            Monthly spending limits and progress
           </p>
         </div>
         <Button
@@ -258,8 +258,8 @@ export default function BudgetsPage() {
         <Card>
           <EmptyState
             icon={<PiggyBank className="w-8 h-8" />}
-            title="No budgets yet"
-            description="Set budgets for your categories to track spending limits"
+            title="No budgets"
+            description="Set a monthly limit to keep your spending on track"
             action={
               <Button
                 size="sm"

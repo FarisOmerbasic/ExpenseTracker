@@ -135,7 +135,7 @@ export default function ExpensesPage() {
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Expenses</h1>
           <p className="text-surface-500 mt-1">
-            Manage and track all your expenses
+            {filtered.length} total &middot; {formatCurrency(totalFiltered, currency)} spent
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -401,11 +401,11 @@ export default function ExpensesPage() {
         <Card>
           <EmptyState
             icon={<ArrowDownRight className="w-8 h-8" />}
-            title={searchQuery ? 'No expenses found' : 'No expenses yet'}
+            title={searchQuery ? 'No matches' : 'No expenses'}
             description={
               searchQuery
-                ? 'Try adjusting your search or filters'
-                : 'Add your first expense to start tracking your spending'
+                ? 'Try a different search term or clear filters'
+                : 'Add your first expense to see it here'
             }
             action={
               !searchQuery ? (

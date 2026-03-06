@@ -54,7 +54,7 @@ export default function StatCard({
                   </span>
                 </div>
               )}
-              <span className="text-[11px] text-surface-400">vs last month</span>
+              <span className="text-[11px] text-surface-400">vs last mo.</span>
             </div>
           )}
         </div>

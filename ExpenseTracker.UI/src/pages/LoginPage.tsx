@@ -56,13 +56,11 @@ export default function LoginPage() {
             <span className="text-2xl font-bold text-white">ExpenseTracker</span>
           </div>
           <h1 className="text-5xl font-bold leading-tight text-white mb-6">
-            Welcome
-            <br />
-            <span className="bg-linear-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">back</span>
+            Welcome<br />back.
           </h1>
           <p className="text-lg text-surface-400 max-w-md leading-relaxed">
-            Track expenses, set budgets, and gain clear insights into your
-            spending — all in one clean dashboard.
+            Sign in to pick up where you left off — your expenses,
+            budgets, and accounts are right where you left them.
           </p>
         </div>
       </div>
@@ -80,10 +78,10 @@ export default function LoginPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-white mb-1.5">
-              Sign in to your account
+              Sign in
             </h2>
             <p className="text-surface-400 mb-8">
-              Enter your credentials to continue
+              Enter your email and password
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">

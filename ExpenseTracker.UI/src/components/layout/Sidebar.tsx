@@ -75,9 +75,6 @@ export default function Sidebar({
 
         
         <nav className="flex-1 px-3 pt-4 pb-4 space-y-1 overflow-y-auto">
-          <p className="px-3.5 mb-2 text-[10px] font-semibold text-surface-600 uppercase tracking-widest">
-            Menu
-          </p>
           {navLinks.map((link) => (
             <NavLink
               key={link.path}

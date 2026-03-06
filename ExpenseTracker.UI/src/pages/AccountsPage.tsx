@@ -80,7 +80,7 @@ export default function AccountsPage() {
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Accounts</h1>
           <p className="text-surface-500 mt-1">
-            Manage your financial accounts
+            {accounts?.length || 0} accounts &middot; {formatCurrency(totalBalance, currency)} total
           </p>
         </div>
         <Button
@@ -186,8 +186,8 @@ export default function AccountsPage() {
         <Card>
           <EmptyState
             icon={<Wallet className="w-8 h-8" />}
-            title="No accounts yet"
-            description="Add your bank accounts, wallets, or cash accounts"
+            title="No accounts"
+            description="Add a bank account, wallet, or cash stash to get started"
             action={
               <Button
                 size="sm"

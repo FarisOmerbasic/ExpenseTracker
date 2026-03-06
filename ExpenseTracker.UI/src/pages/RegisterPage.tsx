@@ -74,20 +74,18 @@ export default function RegisterPage() {
             <span className="text-2xl font-bold text-white">ExpenseTracker</span>
           </div>
           <h1 className="text-5xl font-bold leading-tight text-white mb-6">
-            Start your
-            <br />
-            <span className="bg-linear-to-r from-accent-400 to-primary-400 bg-clip-text text-transparent">financial journey</span>
+            Get started.
           </h1>
           <p className="text-lg text-surface-400 max-w-md leading-relaxed">
-            Set up your account in seconds and start tracking expenses,
-            setting budgets, and understanding where your money goes.
+            Create an account in a few seconds. You can track expenses,
+            set budgets, and see where your money goes.
           </p>
 
           <div className="mt-14 space-y-4">
             {[
-              'Track expenses across multiple accounts',
-              'Set budgets and get smart alerts',
-              'Beautiful charts and insights',
+              'Expenses, categories, accounts, budgets',
+              'Charts and monthly breakdowns',
+              'Works on all devices',
             ].map((text) => (
               <div key={text} className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-primary-500/15 border border-primary-500/20 flex items-center justify-center">
@@ -112,10 +110,10 @@ export default function RegisterPage() {
             </div>
 
             <h2 className="text-2xl font-bold text-white mb-1.5">
-              Create your account
+              Create account
             </h2>
             <p className="text-surface-400 mb-8">
-              Get started in just a few seconds
+              Fill in the details below
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">

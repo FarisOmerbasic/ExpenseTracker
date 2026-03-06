@@ -72,7 +72,7 @@ export default function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold text-surface-900">Settings</h1>
         <p className="text-surface-500 mt-1">
-          Manage your account and preferences
+          Account, preferences, and security
         </p>
       </div>
 
@@ -104,7 +104,7 @@ export default function SettingsPage() {
           {activeTab === 'profile' && (
             <Card>
               <h2 className="text-lg font-bold text-surface-900 mb-6">
-                Profile Information
+                Profile
               </h2>
 
               
@@ -211,7 +211,7 @@ export default function SettingsPage() {
                   ))}
                 </div>
                 <p className="text-xs text-surface-400 mt-4 italic">
-                  Notification preferences are saved locally. Email notifications require server-side setup.
+                  Saved locally. Email delivery needs server-side configuration.
                 </p>
               </Card>
             </div>
@@ -247,7 +247,7 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-2 p-3 bg-warning-50 rounded-xl">
                   <Shield className="w-4 h-4 text-warning-500 shrink-0" />
                   <p className="text-xs text-warning-600">
-                    Use at least 8 characters with a mix of letters, numbers, and symbols.
+                    At least 8 characters. Mix letters, numbers, and symbols.
                   </p>
                 </div>
                 <Button

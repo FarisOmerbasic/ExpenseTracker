@@ -49,7 +49,7 @@ export function getCurrencySymbol(currency = 'USD'): string {
 }
 
 export const CATEGORY_COLORS = [
-  '#6366f1',
+  '#5c5ce6',
   '#10b981',
   '#f59e0b',
   '#ef4444',
