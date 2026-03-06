@@ -81,7 +81,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       </div>
 
       <span className="hidden sm:inline text-xs text-surface-400 font-medium">
-        {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+        {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
       </span>
 
       {mobileSearchOpen && (
