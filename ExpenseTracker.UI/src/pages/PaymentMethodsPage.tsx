@@ -97,7 +97,7 @@ export default function PaymentMethodsPage() {
             Payment Methods
           </h1>
           <p className="text-surface-500 mt-1">
-            Manage how you pay for things
+            {methods?.length || 0} methods configured
           </p>
         </div>
         <Button
@@ -160,8 +160,8 @@ export default function PaymentMethodsPage() {
         <Card>
           <EmptyState
             icon={<CreditCard className="w-8 h-8" />}
-            title="No payment methods yet"
-            description="Add your cards, wallets, and other payment methods"
+            title="No payment methods"
+            description="Add how you pay — card, cash, wallet, transfer, etc."
             action={
               <Button
                 size="sm"

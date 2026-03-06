@@ -76,7 +76,7 @@ export default function CategoriesPage() {
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Categories</h1>
           <p className="text-surface-500 mt-1">
-            Organize your expenses with categories
+            {categories?.length || 0} categories set up
           </p>
         </div>
         <Button
@@ -145,8 +145,8 @@ export default function CategoriesPage() {
         <Card>
           <EmptyState
             icon={<Tag className="w-8 h-8" />}
-            title="No categories yet"
-            description="Create categories to organize your expenses"
+            title="No categories"
+            description="Add your first category to start organizing expenses"
             action={
               <Button
                 size="sm"
