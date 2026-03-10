@@ -72,7 +72,7 @@ export default function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold text-surface-900">Settings</h1>
         <p className="text-surface-500 mt-1">
-          Account, preferences, and security
+          Your account, preferences, and security
         </p>
       </div>
 
@@ -104,12 +104,12 @@ export default function SettingsPage() {
           {activeTab === 'profile' && (
             <Card>
               <h2 className="text-lg font-bold text-surface-900 mb-6">
-                Profile
+                Your profile
               </h2>
 
               
               <div className="flex items-center gap-5 mb-8">
-                <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary-600/25">
+                <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary-600/20">
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
                 </div>
                 <div>
@@ -220,7 +220,7 @@ export default function SettingsPage() {
           {activeTab === 'security' && (
             <Card>
               <h2 className="text-lg font-bold text-surface-900 mb-6">
-                Change Password
+                  Update password
               </h2>
               <div className="max-w-md space-y-5">
                 <Input
