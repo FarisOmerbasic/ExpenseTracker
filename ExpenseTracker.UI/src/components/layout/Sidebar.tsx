@@ -20,7 +20,7 @@ const navLinks = [
   { label: 'Categories', path: '/categories', icon: Tag },
   { label: 'Budgets', path: '/budgets', icon: PiggyBank },
   { label: 'Accounts', path: '/accounts', icon: Wallet },
-  { label: 'Payment Methods', path: '/payment-methods', icon: CreditCard },
+  { label: 'Payments', path: '/payment-methods', icon: CreditCard },
 ];
 
 export default function Sidebar({
@@ -34,10 +34,10 @@ export default function Sidebar({
 
   const linkClasses = ({ isActive }: { isActive: boolean }) =>
     clsx(
-      'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200',
+      'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150',
       isActive
-        ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/25'
-        : 'text-surface-400 hover:bg-white/[0.08] hover:text-surface-200'
+        ? 'bg-primary-600/90 text-white shadow-md shadow-primary-600/20'
+        : 'text-surface-400 hover:bg-white/[0.06] hover:text-surface-200'
     );
 
   return (
@@ -74,7 +74,10 @@ export default function Sidebar({
         </div>
 
         
-        <nav className="flex-1 px-3 pt-4 pb-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 px-3 pt-4 pb-4 space-y-0.5 overflow-y-auto">
+          <p className="px-3.5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-surface-600">
+            Menu
+          </p>
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -89,7 +92,7 @@ export default function Sidebar({
         </nav>
 
         
-        <div className="px-3 pb-3 space-y-1 border-t border-white/6 pt-3">
+        <div className="px-3 pb-3 space-y-0.5 border-t border-white/6 pt-3">
           <NavLink
             to="/settings"
             className={linkClasses}
@@ -100,7 +103,7 @@ export default function Sidebar({
           </NavLink>
           <button
             onClick={logout}
-            className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-[13px] font-medium text-surface-500 hover:text-danger-400 hover:bg-danger-500/10 transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-[13px] font-medium text-surface-500 hover:text-danger-400 hover:bg-danger-500/8 transition-all duration-150 cursor-pointer"
           >
             <LogOut className="w-4.5 h-4.5 shrink-0" />
             Log Out
