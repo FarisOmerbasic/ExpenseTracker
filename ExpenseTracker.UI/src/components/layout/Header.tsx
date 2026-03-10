@@ -39,7 +39,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-white border-b border-surface-200 flex items-center justify-between px-6 gap-4 shrink-0">
+    <header className="sticky top-0 z-30 h-14 bg-white/95 backdrop-blur-sm border-b border-surface-200/70 flex items-center justify-between px-6 gap-4 shrink-0">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
