@@ -10,11 +10,11 @@ export default function NotFoundPage() {
       <div className="text-center animate-fade-in max-w-sm">
         <p className="text-8xl font-black text-surface-200 select-none mb-2 tracking-tighter">404</p>
         <h1 className="text-xl font-bold text-surface-900 mb-2">
-          Nothing here
+          Wrong turn
         </h1>
         <p className="text-sm text-surface-500 mb-8 leading-relaxed">
-          This page doesn&apos;t exist. It might have been removed,
-          or you may have typed the URL wrong.
+          This page doesn&apos;t exist. It may have been moved,
+          or the URL might be off.
         </p>
         <div className="flex items-center justify-center gap-3">
           <Link to="/dashboard">
