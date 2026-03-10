@@ -82,24 +82,24 @@ function App() {
       </Router>
 
       <Toaster
-        position="top-right"
+        position="bottom-right"
         toastOptions={{
-          duration: 3000,
+          duration: 2500,
           style: {
             background: '#fff',
-            color: '#111827',
-            borderRadius: '12px',
-            border: '1px solid #e5e7eb',
+            color: '#1c1917',
+            borderRadius: '14px',
+            border: '1px solid #e7e5e4',
             padding: '12px 16px',
             fontSize: '14px',
             fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
           },
           success: {
-            iconTheme: { primary: '#10b981', secondary: '#fff' },
+            iconTheme: { primary: '#16a34a', secondary: '#fff' },
           },
           error: {
-            iconTheme: { primary: '#ef4444', secondary: '#fff' },
+            iconTheme: { primary: '#dc2626', secondary: '#fff' },
           },
         }}
       />
