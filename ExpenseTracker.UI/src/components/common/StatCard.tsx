@@ -29,7 +29,7 @@ export default function StatCard({
   const c = colorMap[color];
 
   return (
-    <div className="bg-white rounded-2xl border border-surface-200/80 p-5 card-shadow transition-all duration-300 hover:card-shadow-hover">
+    <div className="bg-white rounded-2xl border border-surface-200/70 p-5 card-shadow transition-all duration-200 hover:card-shadow-hover">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1.5 min-w-0">
           <p className="text-xs font-medium text-surface-500 uppercase tracking-wide">{label}</p>
@@ -58,7 +58,7 @@ export default function StatCard({
             </div>
           )}
         </div>
-        <div className={clsx('w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ring-1', c.bg, c.icon, c.ring)}>
+        <div className={clsx('w-11 h-11 rounded-xl flex items-center justify-center shrink-0', c.bg, c.icon)}>
           {icon}
         </div>
       </div>
