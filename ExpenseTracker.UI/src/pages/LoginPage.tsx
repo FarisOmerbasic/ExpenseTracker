@@ -42,8 +42,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex bg-surface-950 relative overflow-hidden">
       
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-125 h-125 bg-primary-600/15 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/3 w-100 h-100 bg-accent-500/10 rounded-full blur-[128px]" />
+        <div className="absolute top-1/4 left-1/4 w-125 h-125 bg-primary-600/10 rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/3 w-100 h-100 bg-accent-500/6 rounded-full blur-[128px]" />
       </div>
 
       
@@ -56,11 +56,11 @@ export default function LoginPage() {
             <span className="text-2xl font-bold text-white">ExpenseTracker</span>
           </div>
           <h1 className="text-5xl font-bold leading-tight text-white mb-6">
-            Welcome<br />back.
+            Hey, welcome<br />back.
           </h1>
           <p className="text-lg text-surface-400 max-w-md leading-relaxed">
-            Sign in to pick up where you left off — your expenses,
-            budgets, and accounts are right where you left them.
+            Your expenses, budgets, and accounts are right where
+            you left them. Pick up where you left off.
           </p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function LoginPage() {
       
       <div className="flex-1 flex items-center justify-center px-6 py-12 relative z-10">
         <div className="w-full max-w-md">
-          <div className="bg-white/4 backdrop-blur-xl border border-white/8 rounded-2xl p-8 lg:p-10 shadow-2xl shadow-black/20">
+          <div className="bg-white/[0.035] backdrop-blur-xl border border-white/[0.07] rounded-2xl p-8 lg:p-10 shadow-2xl shadow-black/20">
             
             <div className="lg:hidden flex items-center gap-3 mb-8">
               <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary-600/30">
@@ -80,8 +80,8 @@ export default function LoginPage() {
             <h2 className="text-2xl font-bold text-white mb-1.5">
               Sign in
             </h2>
-            <p className="text-surface-400 mb-8">
-              Enter your email and password
+            <p className="text-surface-400 mb-8 text-[15px]">
+              Good to see you again
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -109,7 +109,7 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                className="w-full shadow-lg shadow-primary-600/25"
+                className="w-full shadow-lg shadow-primary-600/20"
                 size="lg"
                 isLoading={isLoading}
                 icon={<ArrowRight className="w-4 h-4" />}
@@ -124,7 +124,7 @@ export default function LoginPage() {
                 to="/register"
                 className="font-semibold text-primary-400 hover:text-primary-300 transition-colors"
               >
-                Create one
+                Create one for free
               </Link>
             </p>
           </div>
