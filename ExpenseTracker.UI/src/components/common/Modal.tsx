@@ -54,7 +54,7 @@ export default function Modal({
       }}
     >
       
-      <div className="absolute inset-0 bg-surface-950/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-surface-950/35 backdrop-blur-sm animate-fade-in" />
 
       
       <div
