@@ -108,8 +108,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-surface-950 text-white">
       
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-150 h-150 bg-primary-600/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 left-1/4 w-125 h-125 bg-emerald-500/6 rounded-full blur-[120px]" />
+        <div className="absolute top-0 right-1/4 w-150 h-150 bg-primary-600/6 rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 left-1/4 w-125 h-125 bg-emerald-500/4 rounded-full blur-[128px]" />
       </div>
 
       <div className="relative z-10">
@@ -163,7 +163,7 @@ export default function LandingPage() {
               {isAuthenticated ? (
                 <>Your finances,<br />at a glance.</>
               ) : (
-                <>Track your<br />spending.</>
+                <>Track what<br />you spend.</>
               )}
             </h1>
 
@@ -171,7 +171,7 @@ export default function LandingPage() {
               {isAuthenticated ? (
                 `A snapshot of your spending across all accounts.`
               ) : (
-                `An expense tracker built with React, .NET, and PostgreSQL. Budgets, categories, accounts, charts — nothing fancy, just the stuff you need.`
+                `A simple expense tracker built with React, .NET, and PostgreSQL. Budgets, categories, accounts, charts — nothing fancy, just useful stuff.`
               )}
             </p>
 
