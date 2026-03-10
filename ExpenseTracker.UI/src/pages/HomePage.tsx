@@ -42,10 +42,10 @@ import AddExpenseModal from '../components/expenses/AddExpenseModal';
 import { usePageTitle } from '../hooks/usePageTitle';
 import type { Expense, Category, Budget } from '../types';
 
-const CHART_PRIMARY = '#5c5ce6';
-const CHART_BAR = '#7b7ff8';
-const CHART_GRID = '#f3f4f6';
-const CHART_TICK = '#9ca3af';
+const CHART_PRIMARY = '#6c55e0';
+const CHART_BAR = '#8471f6';
+const CHART_GRID = '#f4f3f1';
+const CHART_TICK = '#a8a29e';
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -274,9 +274,9 @@ export default function HomePage() {
                   <Tooltip
                     contentStyle={{
                       background: '#fff',
-                      border: '1px solid #e5e7eb',
+                      border: '1px solid #e7e5e4',
                       borderRadius: '12px',
-                      boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                       padding: '12px 16px',
                     }}
                     formatter={(value) => [formatCurrency(Number(value ?? 0), currency), 'Spent']}
@@ -331,9 +331,9 @@ export default function HomePage() {
                     <Tooltip
                       contentStyle={{
                         background: '#fff',
-                        border: '1px solid #e5e7eb',
+                        border: '1px solid #e7e5e4',
                         borderRadius: '12px',
-                        boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                         padding: '8px 12px',
                       }}
                       formatter={(value) => [formatCurrency(Number(value ?? 0), currency)]}
@@ -580,9 +580,9 @@ function DailySpendingChart({
           <Tooltip
             contentStyle={{
               background: '#fff',
-              border: '1px solid #e5e7eb',
+              border: '1px solid #e7e5e4',
               borderRadius: '12px',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
               padding: '8px 12px',
             }}
             formatter={(value) => [formatCurrency(Number(value ?? 0), currency), 'Spent']}
