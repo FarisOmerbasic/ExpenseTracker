@@ -22,15 +22,15 @@ export default function Button({
 
   const variants = {
     primary:
-      'bg-primary-600 text-white hover:bg-primary-500 active:bg-primary-700 shadow-sm',
+      'bg-primary-600 text-white hover:bg-primary-500 active:bg-primary-700 shadow-sm shadow-primary-600/10',
     secondary:
       'bg-surface-100 text-surface-700 hover:bg-surface-200 active:bg-surface-300',
     outline:
-      'border border-surface-200 text-surface-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50',
+      'border border-surface-200 text-surface-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50/60',
     ghost:
       'text-surface-500 hover:text-surface-800 hover:bg-surface-100',
     danger:
-      'bg-danger-500 text-white hover:bg-danger-600 active:bg-danger-700 shadow-sm',
+      'bg-danger-500 text-white hover:bg-danger-600 active:bg-danger-600 shadow-sm shadow-danger-500/10',
   };
 
   const sizes = {
