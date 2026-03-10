@@ -60,8 +60,8 @@ export default function RegisterPage() {
     <div className="min-h-screen flex bg-surface-950 relative overflow-hidden">
       
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/3 w-125 h-125 bg-accent-500/15 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-100 h-100 bg-primary-600/15 rounded-full blur-[128px]" />
+        <div className="absolute top-1/3 left-1/3 w-125 h-125 bg-accent-500/8 rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-100 h-100 bg-primary-600/10 rounded-full blur-[128px]" />
       </div>
 
       
@@ -74,11 +74,11 @@ export default function RegisterPage() {
             <span className="text-2xl font-bold text-white">ExpenseTracker</span>
           </div>
           <h1 className="text-5xl font-bold leading-tight text-white mb-6">
-            Get started.
+            Let's set<br />you up.
           </h1>
           <p className="text-lg text-surface-400 max-w-md leading-relaxed">
-            Create an account in a few seconds. You can track expenses,
-            set budgets, and see where your money goes.
+            Quick setup, nothing complicated. Track expenses,
+            set budgets, and actually see where your money goes.
           </p>
 
           <div className="mt-14 space-y-4">
@@ -88,7 +88,7 @@ export default function RegisterPage() {
               'Works on all devices',
             ].map((text) => (
               <div key={text} className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary-500/15 border border-primary-500/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-primary-500/10 border border-primary-500/15 flex items-center justify-center">
                   <Check className="w-4 h-4 text-primary-400" />
                 </div>
                 <span className="text-surface-300 text-sm">{text}</span>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
       
       <div className="flex-1 flex items-center justify-center px-6 py-12 relative z-10">
         <div className="w-full max-w-md">
-          <div className="bg-white/4 backdrop-blur-xl border border-white/8 rounded-2xl p-8 lg:p-10 shadow-2xl shadow-black/20">
+          <div className="bg-white/[0.035] backdrop-blur-xl border border-white/[0.07] rounded-2xl p-8 lg:p-10 shadow-2xl shadow-black/20">
             <div className="lg:hidden flex items-center gap-3 mb-8">
               <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary-600/30">
                 <TrendingDown className="w-5 h-5 text-white" />
@@ -112,8 +112,8 @@ export default function RegisterPage() {
             <h2 className="text-2xl font-bold text-white mb-1.5">
               Create account
             </h2>
-            <p className="text-surface-400 mb-8">
-              Fill in the details below
+            <p className="text-surface-400 mb-8 text-[15px]">
+              Takes about 30 seconds
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -173,7 +173,7 @@ export default function RegisterPage() {
 
               <Button
                 type="submit"
-                className="w-full shadow-lg shadow-primary-600/25"
+                className="w-full shadow-lg shadow-primary-600/20"
                 size="lg"
                 isLoading={isLoading}
                 icon={<ArrowRight className="w-4 h-4" />}
